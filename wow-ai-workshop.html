@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Seekhega India — Free AI Workshop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep: #1a1032;
+            --plum: #3d1f5c;
+            --orchid: #9b59b6;
+            --rose: #e84393;
+            --gold: #f9ca24;
+            --peach: #fab1a0;
+            --cream: #fef9f4;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ── BRAND BAR ── */
+        .brand-bar {
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .brand-logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .brand-logo-text {
+            font-weight: 700;
+            font-size: 0.85rem;
+            line-height: 1.2;
+        }
+
+        .brand-logo-text.reussi {
+            color: #1a5c2a;
+        }
+
+        .brand-logo-text.reussi small {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #1a5c2a;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .brand-logo-text.aigurukool {
+            color: #1a1a2e;
+        }
+
+        .brand-logo-text.aigurukool span {
+            color: #0ea5e9;
+        }
+
+        .brand-collab {
+            font-size: 0.7rem;
+            color: #999;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0 0.5rem;
+        }
+
+        /* Réussi sun logo SVG */
+        .reussi-logo-svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* AI Gurukool logo SVG */
+        .aigurukool-logo-svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        @media (max-width: 600px) {
+            .brand-bar {
+                padding: 0.5rem 1rem;
+                gap: 0.75rem;
+            }
+            .brand-logo img, .reussi-logo-svg, .aigurukool-logo-svg {
+                height: 32px;
+                width: 32px;
+            }
+            .brand-logo-text { font-size: 0.75rem; }
+            .brand-logo-text.reussi small { font-size: 0.55rem; }
+            .brand-collab { font-size: 0.6rem; padding: 0 0.25rem; }
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: #2d2d2d;
+            background: var(--cream);
+            overflow-x: hidden;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--deep) 0%, var(--plum) 40%, #6c3483 70%, var(--orchid) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(232, 67, 147, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 30%, rgba(249, 202, 36, 0.1) 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 80%, rgba(155, 89, 182, 0.2) 0%, transparent 50%);
+            animation: auraPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes auraPulse {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.05) rotate(3deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(249, 202, 36, 0.15);
+            border: 1px solid rgba(249, 202, 36, 0.4);
+            color: var(--gold);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--white);
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero h1 em {
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .hero-sub {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-details {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .hero-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.95rem;
+        }
+
+        .hero-detail .icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--rose), #c0392b);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(232, 67, 147, 0.4);
+            animation: fadeInUp 0.8s ease 0.8s both;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(232, 67, 147, 0.5);
+        }
+
+        /* ── WAVE DIVIDER ── */
+        .wave-divider {
+            height: 80px;
+            background: var(--cream);
+            position: relative;
+            margin-top: -80px;
+        }
+
+        .wave-divider svg {
+            position: absolute;
+            top: -1px;
+            width: 100%;
+            height: 80px;
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .section-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--orchid);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--deep);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.05rem;
+            color: #666;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+        }
+
+        /* ── WHAT YOU'LL LEARN ── */
+        .learn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .learn-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(155, 89, 182, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .learn-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--orchid), var(--rose));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .learn-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(61, 31, 92, 0.1);
+        }
+
+        .learn-card:hover::before { opacity: 1; }
+
+        .learn-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .learn-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .learn-card p {
+            font-size: 0.9rem;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        /* ── WHO IS THIS FOR ── */
+        .who-section {
+            background: linear-gradient(135deg, var(--deep) 0%, var(--plum) 100%);
+            color: white;
+        }
+
+        .who-section .section-label { color: var(--gold); }
+        .who-section .section-title { color: white; }
+        .who-section .section-subtitle { color: rgba(255,255,255,0.7); }
+
+        .who-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .who-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 1.75rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .who-card:hover {
+            background: rgba(255,255,255,0.14);
+            transform: translateY(-3px);
+        }
+
+        .who-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .who-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .who-card p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.4;
+        }
+
+        /* ── AGENDA ── */
+        .agenda-list {
+            list-style: none;
+            position: relative;
+        }
+
+        .agenda-list::before {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--orchid), var(--rose), var(--gold));
+        }
+
+        .agenda-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.25rem 0;
+            align-items: flex-start;
+        }
+
+        .agenda-dot {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            background: linear-gradient(135deg, var(--orchid), var(--rose));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .agenda-content h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--deep);
+            margin-bottom: 0.25rem;
+        }
+
+        .agenda-content p {
+            font-size: 0.9rem;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        .agenda-time {
+            font-size: 0.75rem;
+            color: var(--orchid);
+            font-weight: 600;
+        }
+
+        /* ── REGISTER SECTION ── */
+        .register-section {
+            background: linear-gradient(135deg, #fef9f4, #fce4ec);
+            text-align: center;
+        }
+
+        .register-section .section-title {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 2rem auto 0;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(61, 31, 92, 0.1);
+            border: 1px solid rgba(155, 89, 182, 0.1);
+        }
+
+        .form-placeholder {
+            padding: 3rem 2rem;
+            border: 2px dashed rgba(155, 89, 182, 0.3);
+            border-radius: 12px;
+            color: #999;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .form-placeholder code {
+            display: block;
+            margin-top: 1rem;
+            background: #f5f0fa;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--plum);
+            word-break: break-all;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--deep);
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            padding: 2.5rem 2rem;
+            font-size: 0.85rem;
+        }
+
+        footer .logo-area {
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        footer .logo-area span {
+            color: var(--gold);
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .hero-details { flex-direction: column; gap: 0.75rem; align-items: center; }
+            section { padding: 3.5rem 1.25rem; }
+            .learn-grid, .who-grid { grid-template-columns: 1fr; }
+            .form-container { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── BRAND BAR ── -->
+<div class="brand-bar">
+    <div class="brand-logo">
+        <!-- Réussi Logo: Sun + Globe -->
+        <svg class="reussi-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(50,50)">
+                <!-- Sun rays -->
+                <g fill="#f0a500">
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(0)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(30)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(60)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(90)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(120)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(150)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(180)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(210)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(240)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(270)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(300)"/>
+                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(330)"/>
+                </g>
+                <!-- Globe -->
+                <circle r="22" fill="#2e86c1"/>
+                <ellipse rx="22" ry="22" fill="none" stroke="#27ae60" stroke-width="3"/>
+                <path d="M-22,0 Q-10,-15 0,-10 Q10,-5 22,0" fill="#27ae60" opacity="0.7"/>
+                <path d="M-22,5 Q-5,20 10,10 Q18,5 22,0" fill="#27ae60" opacity="0.7"/>
+            </g>
+        </svg>
+        <div class="brand-logo-text reussi">
+            RÉUSSI<small>Académie des Langues</small>
+        </div>
+    </div>
+
+    <div class="brand-collab">in collaboration with</div>
+
+    <div class="brand-logo">
+        <!-- AI Gurukool Logo -->
+        <svg class="aigurukool-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Outer tech circle -->
+            <circle cx="50" cy="50" r="45" fill="none" stroke="#0ea5e9" stroke-width="3" stroke-dasharray="8 4"/>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#0ea5e9" stroke-width="1.5" opacity="0.5"/>
+            <!-- AI text -->
+            <text x="50" y="48" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="28" font-weight="900" fill="#1a1a2e">AI</text>
+            <!-- Small accent dot -->
+            <circle cx="68" cy="32" r="4" fill="#e84393"/>
+            <!-- GURU KOOL text -->
+            <text x="50" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#1a1a2e">GURU <tspan fill="#0ea5e9">KOOL</tspan></text>
+        </svg>
+        <div class="brand-logo-text aigurukool">
+            AI Guru<span>kool</span>
+        </div>
+    </div>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="badge">Free Virtual Workshop</div>
+        <h1>AI <em>Seekhega</em> India</h1>
+        <p style="font-size: 0.95rem; color: rgba(255,255,255,0.55); margin-bottom: 1rem; animation: fadeInUp 0.8s ease 0.3s both; letter-spacing: 0.5px;">
+            by <strong style="color: rgba(255,255,255,0.8);">Réussi Academy</strong> in collaboration with <strong style="color: rgba(255,255,255,0.8);">AI Gurukool</strong>
+        </p>
+        <p class="hero-sub">
+            Discover how Artificial Intelligence can transform your daily life, career, and ambitions — no tech background needed. Aao, AI seekhein!</p>
+        <div class="hero-details">
+            <div class="hero-detail">
+                <div class="icon">📅</div>
+                <span>Date: Coming Soon</span>
+            </div>
+            <div class="hero-detail">
+                <div class="icon">⏱️</div>
+                <span>60 Minutes</span>
+            </div>
+            <div class="hero-detail">
+                <div class="icon">💻</div>
+                <span>Virtual (Zoom/Meet)</span>
+            </div>
+            <div class="hero-detail">
+                <div class="icon">🎟️</div>
+                <span>100% Free</span>
+            </div>
+        </div>
+        <a href="#register" class="cta-btn">Register Now →</a>
+    </div>
+</section>
+
+<div class="wave-divider">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+        <path fill="#1a1032" d="M0,0 L1440,0 L1440,40 Q1080,80 720,40 Q360,0 0,40 Z"/>
+    </svg>
+</div>
+
+<!-- ── WHAT YOU'LL LEARN ── -->
+<section>
+    <div class="section-inner reveal">
+        <div class="section-label">What You'll Learn</div>
+        <h2 class="section-title">One Hour That Can Change How You Work & Live</h2>
+        <p class="section-subtitle">No jargon, no coding — just practical AI skills you can use starting today.</p>
+
+        <div class="learn-grid">
+            <div class="learn-card">
+                <div class="learn-icon">🤖</div>
+                <h3>AI Demystified</h3>
+                <p>Understand what AI really is — and why it's not just for engineers or techies.</p>
+            </div>
+            <div class="learn-card">
+                <div class="learn-icon">⚡</div>
+                <h3>Live Demos</h3>
+                <p>Watch AI write emails, plan meals, create designs, and solve real problems — live.</p>
+            </div>
+            <div class="learn-card">
+                <div class="learn-icon">💼</div>
+                <h3>AI for Your Career</h3>
+                <p>Resume building, interview prep, productivity hacks, and content creation with AI.</p>
+            </div>
+            <div class="learn-card">
+                <div class="learn-icon">🏠</div>
+                <h3>AI for Daily Life</h3>
+                <p>Meal planning, budgeting, kids' homework help, language translation, and more.</p>
+            </div>
+            <div class="learn-card">
+                <div class="learn-icon">🚀</div>
+                <h3>Entrepreneurship</h3>
+                <p>Marketing, customer support, and business automation — powered by AI tools.</p>
+            </div>
+            <div class="learn-card">
+                <div class="learn-icon">🎯</div>
+                <h3>Your AI Roadmap</h3>
+                <p>Walk away with a clear path to continue learning and mastering AI skills.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── WHO IS THIS FOR ── -->
+<section class="who-section">
+    <div class="section-inner reveal">
+        <div class="section-label">Who Is This For</div>
+        <h2 class="section-title">Built for Everyone — From Every Walk of Life</h2>
+        <p class="section-subtitle">Whether you're a student, a professional, a homemaker, or an entrepreneur — this workshop is for you and your family.</p>
+
+        <div class="who-grid">
+            <div class="who-card">
+                <div class="who-emoji">🎓</div>
+                <h3>Students</h3>
+                <p>Supercharge your learning & career prep</p>
+            </div>
+            <div class="who-card">
+                <div class="who-emoji">💻</div>
+                <h3>Professionals</h3>
+                <p>10x your productivity at work</p>
+            </div>
+            <div class="who-card">
+                <div class="who-emoji">🏠</div>
+                <h3>Homemakers</h3>
+                <p>Smart home management with AI</p>
+            </div>
+            <div class="who-card">
+                <div class="who-emoji">📈</div>
+                <h3>Entrepreneurs</h3>
+                <p>Grow your business with AI tools</p>
+            </div>
+            <div class="who-card">
+                <div class="who-emoji">🎨</div>
+                <h3>Freelancers</h3>
+                <p>Create, market & earn smarter</p>
+            </div>
+            <div class="who-card">
+                <div class="who-emoji">👨‍👩‍👧‍👦</div>
+                <h3>Families</h3>
+                <p>Learn AI together as a family</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── AGENDA ── -->
+<section>
+    <div class="section-inner reveal">
+        <div class="section-label">Workshop Agenda</div>
+        <h2 class="section-title">60 Minutes, Packed with Value</h2>
+        <p class="section-subtitle">Here's exactly what we'll cover together.</p>
+
+        <ul class="agenda-list">
+            <li class="agenda-item">
+                <div class="agenda-dot">1</div>
+                <div class="agenda-content">
+                    <span class="agenda-time">5 min</span>
+                    <h3>Welcome & Introduction</h3>
+                    <p>Meet your trainer, set the stage, and break the ice.</p>
+                </div>
+            </li>
+            <li class="agenda-item">
+                <div class="agenda-dot">2</div>
+                <div class="agenda-content">
+                    <span class="agenda-time">10 min</span>
+                    <h3>AI Demystified</h3>
+                    <p>What AI actually is — explained simply. You're already using it daily!</p>
+                </div>
+            </li>
+            <li class="agenda-item">
+                <div class="agenda-dot">3</div>
+                <div class="agenda-content">
+                    <span class="agenda-time">15 min</span>
+                    <h3>Live AI Demos</h3>
+                    <p>Watch AI write, create, translate, and solve problems — in real time.</p>
+                </div>
+            </li>
+            <li class="agenda-item">
+                <div class="agenda-dot">4</div>
+                <div class="agenda-content">
+                    <span class="agenda-time">10 min</span>
+                    <h3>AI for Your Life & Career</h3>
+                    <p>Tailored use cases for homemakers, students, professionals & entrepreneurs.</p>
+                </div>
+            </li>
+            <li class="agenda-item">
+                <div class="agenda-dot">5</div>
+                <div class="agenda-content">
+                    <span class="agenda-time">10 min</span>
+                    <h3>Interactive Q&A</h3>
+                    <p>Your questions answered. Live polls and discussions.</p>
+                </div>
+            </li>
+            <li class="agenda-item">
+                <div class="agenda-dot">6</div>
+                <div class="agenda-content">
+                    <span class="agenda-time">10 min</span>
+                    <h3>What's Next — Your AI Journey</h3>
+                    <p>Resources, roadmap, and how to continue mastering AI skills.</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<!-- ── REGISTER ── -->
+<section class="register-section" id="register">
+    <div class="section-inner reveal">
+        <div class="section-label">Register Now</div>
+        <h2 class="section-title">Reserve Your Spot — It's Free!</h2>
+        <p class="section-subtitle" style="margin: 0 auto 2rem;">Limited seats available. Fill the form below to secure your place.</p>
+
+        <div class="form-container">
+            <div class="form-placeholder">
+                📋 <strong>Google Form will appear here</strong><br><br>
+                Replace this placeholder with your Google Form embed code.
+                <code>
+                    &lt;iframe src="YOUR_GOOGLE_FORM_EMBED_URL" width="100%" height="800" frameborder="0"&gt;&lt;/iframe&gt;
+                </code>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+    <div class="logo-area">
+        AI <span>Seekhega India</span>
+    </div>
+    <p>By <strong>Réussi Academy</strong> in collaboration with <strong>AI Gurukool</strong></p>
+    <p style="margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.5;">© 2026 Réussi Academy & AI Gurukool. All rights reserved.</p>
+</footer>
+
+<!-- ── SCROLL REVEAL ── -->
+<script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
