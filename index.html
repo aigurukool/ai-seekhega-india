@@ -1,818 +1,344 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Seekhega India — Free AI Workshop</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --deep: #1a1032;
-            --plum: #3d1f5c;
-            --orchid: #9b59b6;
-            --rose: #e84393;
-            --gold: #f9ca24;
-            --peach: #fab1a0;
-            --cream: #fef9f4;
-            --white: #ffffff;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        /* ── BRAND BAR ── */
-        .brand-bar {
-            background: rgba(255,255,255,0.97);
-            backdrop-filter: blur(10px);
-            padding: 0.75rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-        }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-        }
-
-        .brand-logo img {
-            height: 40px;
-            width: auto;
-        }
-
-        .brand-logo-text {
-            font-weight: 700;
-            font-size: 0.85rem;
-            line-height: 1.2;
-        }
-
-        .brand-logo-text.reussi {
-            color: #1a5c2a;
-        }
-
-        .brand-logo-text.reussi small {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 500;
-            color: #1a5c2a;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .brand-logo-text.aigurukool {
-            color: #1a1a2e;
-        }
-
-        .brand-logo-text.aigurukool span {
-            color: #0ea5e9;
-        }
-
-        .brand-collab {
-            font-size: 0.7rem;
-            color: #999;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 0 0.5rem;
-        }
-
-        /* Réussi sun logo SVG */
-        .reussi-logo-svg {
-            width: 40px;
-            height: 40px;
-        }
-
-        /* AI Gurukool logo SVG */
-        .aigurukool-logo-svg {
-            width: 40px;
-            height: 40px;
-        }
-
-        @media (max-width: 600px) {
-            .brand-bar {
-                padding: 0.5rem 1rem;
-                gap: 0.75rem;
-            }
-            .brand-logo img, .reussi-logo-svg, .aigurukool-logo-svg {
-                height: 32px;
-                width: 32px;
-            }
-            .brand-logo-text { font-size: 0.75rem; }
-            .brand-logo-text.reussi small { font-size: 0.55rem; }
-            .brand-collab { font-size: 0.6rem; padding: 0 0.25rem; }
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            color: #2d2d2d;
-            background: var(--cream);
-            overflow-x: hidden;
-        }
-
-        /* ── HERO ── */
-        .hero {
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--deep) 0%, var(--plum) 40%, #6c3483 70%, var(--orchid) 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 5rem 2rem 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 50%, rgba(232, 67, 147, 0.15) 0%, transparent 50%),
-                        radial-gradient(ellipse at 70% 30%, rgba(249, 202, 36, 0.1) 0%, transparent 40%),
-                        radial-gradient(ellipse at 50% 80%, rgba(155, 89, 182, 0.2) 0%, transparent 50%);
-            animation: auraPulse 8s ease-in-out infinite alternate;
-        }
-
-        @keyframes auraPulse {
-            0% { transform: scale(1) rotate(0deg); }
-            100% { transform: scale(1.05) rotate(3deg); }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(249, 202, 36, 0.15);
-            border: 1px solid rgba(249, 202, 36, 0.4);
-            color: var(--gold);
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            animation: fadeInDown 0.8s ease;
-        }
-
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            color: var(--white);
-            line-height: 1.15;
-            margin-bottom: 1rem;
-            animation: fadeInUp 0.8s ease 0.2s both;
-        }
-
-        .hero h1 em {
-            color: var(--gold);
-            font-style: italic;
-        }
-
-        .hero-sub {
-            font-size: clamp(1rem, 2.5vw, 1.3rem);
-            color: rgba(255,255,255,0.8);
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            line-height: 1.6;
-            animation: fadeInUp 0.8s ease 0.4s both;
-        }
-
-        .hero-details {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 2.5rem;
-            animation: fadeInUp 0.8s ease 0.6s both;
-        }
-
-        .hero-detail {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: rgba(255,255,255,0.9);
-            font-size: 0.95rem;
-        }
-
-        .hero-detail .icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
-
-        .cta-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--rose), #c0392b);
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-decoration: none;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 30px rgba(232, 67, 147, 0.4);
-            animation: fadeInUp 0.8s ease 0.8s both;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(232, 67, 147, 0.5);
-        }
-
-        /* ── WAVE DIVIDER ── */
-        .wave-divider {
-            height: 80px;
-            background: var(--cream);
-            position: relative;
-            margin-top: -80px;
-        }
-
-        .wave-divider svg {
-            position: absolute;
-            top: -1px;
-            width: 100%;
-            height: 80px;
-        }
-
-        /* ── SECTIONS ── */
-        section {
-            padding: 5rem 2rem;
-        }
-
-        .section-inner {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .section-label {
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--orchid);
-            margin-bottom: 0.75rem;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
-            color: var(--deep);
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .section-subtitle {
-            font-size: 1.05rem;
-            color: #666;
-            max-width: 600px;
-            line-height: 1.6;
-            margin-bottom: 3rem;
-        }
-
-        /* ── WHAT YOU'LL LEARN ── */
-        .learn-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .learn-card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 2rem;
-            border: 1px solid rgba(155, 89, 182, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .learn-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--orchid), var(--rose));
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .learn-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(61, 31, 92, 0.1);
-        }
-
-        .learn-card:hover::before { opacity: 1; }
-
-        .learn-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .learn-card h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--deep);
-            margin-bottom: 0.5rem;
-        }
-
-        .learn-card p {
-            font-size: 0.9rem;
-            color: #777;
-            line-height: 1.5;
-        }
-
-        /* ── WHO IS THIS FOR ── */
-        .who-section {
-            background: linear-gradient(135deg, var(--deep) 0%, var(--plum) 100%);
-            color: white;
-        }
-
-        .who-section .section-label { color: var(--gold); }
-        .who-section .section-title { color: white; }
-        .who-section .section-subtitle { color: rgba(255,255,255,0.7); }
-
-        .who-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .who-card {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 16px;
-            padding: 1.75rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .who-card:hover {
-            background: rgba(255,255,255,0.14);
-            transform: translateY(-3px);
-        }
-
-        .who-emoji {
-            font-size: 2.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .who-card h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-        }
-
-        .who-card p {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.6);
-            line-height: 1.4;
-        }
-
-        /* ── AGENDA ── */
-        .agenda-list {
-            list-style: none;
-            position: relative;
-        }
-
-        .agenda-list::before {
-            content: '';
-            position: absolute;
-            left: 18px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--orchid), var(--rose), var(--gold));
-        }
-
-        .agenda-item {
-            display: flex;
-            gap: 1.5rem;
-            padding: 1.25rem 0;
-            align-items: flex-start;
-        }
-
-        .agenda-dot {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-            background: linear-gradient(135deg, var(--orchid), var(--rose));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.85rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .agenda-content h3 {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--deep);
-            margin-bottom: 0.25rem;
-        }
-
-        .agenda-content p {
-            font-size: 0.9rem;
-            color: #777;
-            line-height: 1.5;
-        }
-
-        .agenda-time {
-            font-size: 0.75rem;
-            color: var(--orchid);
-            font-weight: 600;
-        }
-
-        /* ── REGISTER SECTION ── */
-        .register-section {
-            background: linear-gradient(135deg, #fef9f4, #fce4ec);
-            text-align: center;
-        }
-
-        .register-section .section-title {
-            margin-bottom: 0.5rem;
-        }
-
-        .form-container {
-            max-width: 700px;
-            margin: 2rem auto 0;
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 20px 60px rgba(61, 31, 92, 0.1);
-            border: 1px solid rgba(155, 89, 182, 0.1);
-        }
-
-        .form-placeholder {
-            padding: 3rem 2rem;
-            border: 2px dashed rgba(155, 89, 182, 0.3);
-            border-radius: 12px;
-            color: #999;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .form-placeholder code {
-            display: block;
-            margin-top: 1rem;
-            background: #f5f0fa;
-            padding: 1rem;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            color: var(--plum);
-            word-break: break-all;
-        }
-
-        /* ── FOOTER ── */
-        footer {
-            background: var(--deep);
-            color: rgba(255,255,255,0.6);
-            text-align: center;
-            padding: 2.5rem 2rem;
-            font-size: 0.85rem;
-        }
-
-        footer .logo-area {
-            margin-bottom: 1rem;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            color: white;
-        }
-
-        footer .logo-area span {
-            color: var(--gold);
-        }
-
-        /* ── ANIMATIONS ── */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 600px) {
-            .hero-details { flex-direction: column; gap: 0.75rem; align-items: center; }
-            section { padding: 3.5rem 1.25rem; }
-            .learn-grid, .who-grid { grid-template-columns: 1fr; }
-            .form-container { padding: 1.25rem; }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Gurukool | AI Seekhega India</title>
+<meta name="description" content="AI Gurukool: hands-on AI education and real AI solutions built for India. Free classes, tools and community by Swapnil Tiwari.">
+<meta property="og:title" content="AI Gurukool | AI Seekhega India">
+<meta property="og:description" content="Hands-on AI education. Real solutions. Built for India.">
+<meta property="og:image" content="https://www.aigurukool.in/assets/swapnil.jpg">
+<link rel="icon" href="assets/logo-mark.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f; --bg2:#0d1220; --card:#111829; --line:#1f2a44;
+  --text:#e8ecf6; --muted:#8e9ab5; --blue:#2f8cff; --blue2:#6bb4ff;
+  --saffron:#ff9933; --green:#2fbf71;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:"Space Grotesk",sans-serif;line-height:1.15}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+section{padding:88px 0}
+.eyebrow{color:var(--blue2);font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+.sec-title{font-size:clamp(1.8rem,3.6vw,2.6rem);margin-bottom:14px}
+.sec-sub{color:var(--muted);max-width:620px}
+.tricolor{height:3px;width:72px;border-radius:3px;background:linear-gradient(90deg,var(--saffron) 33%,#fff 33% 66%,var(--green) 66%);margin:18px 0 0}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(7,9,15,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{display:flex;align-items:center;gap:10px;font-family:"Space Grotesk";font-weight:700}
+.brand img{width:40px;height:40px;border-radius:10px;object-fit:cover;background:#fff}
+.nav-links{display:flex;gap:26px;font-size:.92rem;color:var(--muted)}
+.nav-links a:hover{color:var(--text)}
+@media(max-width:760px){.nav-links{display:none}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;font-weight:600;font-size:.95rem;transition:.2s}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 30px -8px rgba(47,140,255,.6)}
+.btn-primary:hover{background:#1f7af0;transform:translateY(-2px)}
+.btn-ghost{border:1px solid var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue2)}
+
+/* hero */
+.hero{padding:72px 0 88px;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 400px at 78% 40%,rgba(47,140,255,.18),transparent 70%),radial-gradient(500px 300px at 10% 10%,rgba(255,153,51,.07),transparent 70%);pointer-events:none}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;position:relative}
+.hero h1{font-size:clamp(2.6rem,6.4vw,4.6rem);margin:10px 0 18px}
+.hero h1 span{background:linear-gradient(90deg,var(--blue2),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .name{font-size:1.15rem;font-weight:600}
+.roles{color:var(--muted);margin:6px 0 22px;font-size:.95rem}
+.roles b{color:var(--blue2);font-weight:500}
+.hero p.lead{color:#c3cbe0;max-width:520px;margin-bottom:30px;font-size:1.05rem}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.photo{position:relative;justify-self:center;width:100%;max-width:400px}
+.photo .frame{border-radius:28px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -20px rgba(47,140,255,.35)}
+.photo img{display:block;width:100%;height:auto}
+.photo .ring{position:absolute;inset:-14px;border:1px dashed rgba(107,180,255,.35);border-radius:36px;pointer-events:none}
+.photo .badge{position:absolute;left:-26px;bottom:34px;background:#fff;border-radius:16px;padding:8px;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.photo .badge img{width:92px;height:auto;border-radius:10px}
+.stats{display:flex;gap:34px;margin-top:40px;flex-wrap:wrap}
+.stats div b{display:block;font-family:"Space Grotesk";font-size:1.7rem}
+.stats div span{color:var(--muted);font-size:.85rem}
+@media(max-width:860px){
+  .hero .wrap{grid-template-columns:1fr;gap:40px}
+  .photo{order:-1;max-width:300px}
+  .photo .badge{left:-12px}
+}
+
+/* about */
+.about{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.about p{color:#c3cbe0;margin-bottom:14px}
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.pill h3{font-size:1rem;margin-bottom:6px}
+.pill p{color:var(--muted);font-size:.88rem;margin:0}
+@media(max-width:860px){.about .wrap{grid-template-columns:1fr;gap:36px}}
+@media(max-width:460px){.pillars{grid-template-columns:1fr}}
+
+/* solutions */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:44px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;transition:.25s;position:relative;overflow:hidden}
+.card:hover{border-color:rgba(47,140,255,.6);transform:translateY(-4px)}
+.card::after{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:0;transition:.25s}
+.card:hover::after{opacity:1}
+.icon{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:1.35rem;background:rgba(47,140,255,.12);margin-bottom:18px}
+.card h3{font-size:1.25rem;margin-bottom:4px}
+.card .kind{color:var(--blue2);font-size:.82rem;font-weight:500;margin-bottom:12px}
+.card p{color:var(--muted);font-size:.93rem}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.tag{font-size:.74rem;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:#b5c0d8}
+.tag.live{border-color:rgba(47,191,113,.5);color:var(--green)}
+.tag.live::before{content:"● ";font-size:.6rem}
+
+/* stack */
+.stack{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.chip{background:var(--card);border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:.92rem}
+.chip b{color:var(--blue2);font-weight:600;margin-right:6px}
+
+/* resources */
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:44px}
+.res{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:8px;transition:.25s}
+.res:hover{transform:translateY(-4px)}
+.res .top{display:flex;justify-content:space-between;align-items:center}
+.res .logo{width:44px;height:44px;border-radius:12px;display:grid;place-items:center}
+.res .logo svg{width:24px;height:24px;fill:#fff}
+.res .count{font-family:"Space Grotesk";font-size:1.5rem;font-weight:700}
+.res h3{font-size:1.1rem;margin-top:8px}
+.res p{color:var(--muted);font-size:.88rem;flex:1}
+.res .go{color:var(--blue2);font-weight:600;font-size:.9rem;margin-top:6px}
+.yt .logo{background:#ff0033}.ig .logo{background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af)}
+.wa .logo{background:#25d366}.ss .logo{background:#ff6719}
+.yt:hover{border-color:#ff0033}.ig:hover{border-color:#dd2a7b}.wa:hover{border-color:#25d366}.ss:hover{border-color:#ff6719}
+
+/* join */
+.join{text-align:center}
+.join-box{background:linear-gradient(135deg,rgba(47,140,255,.16),rgba(47,191,113,.06));border:1px solid var(--line);border-radius:28px;padding:56px 24px}
+.join-box h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:12px}
+.join-box p{color:#c3cbe0;max-width:560px;margin:0 auto 28px}
+.join-box .cta{justify-content:center}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+footer .mails a{display:block;color:#c3cbe0}
+footer .mails a:hover{color:var(--blue2)}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
 
-<!-- ── BRAND BAR ── -->
-<div class="brand-bar">
-    <div class="brand-logo">
-        <!-- Réussi Logo: Sun + Globe -->
-        <svg class="reussi-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(50,50)">
-                <!-- Sun rays -->
-                <g fill="#f0a500">
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(0)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(30)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(60)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(90)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(120)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(150)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(180)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(210)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(240)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(270)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(300)"/>
-                    <polygon points="0,-45 6,-25 -6,-25" transform="rotate(330)"/>
-                </g>
-                <!-- Globe -->
-                <circle r="22" fill="#2e86c1"/>
-                <ellipse rx="22" ry="22" fill="none" stroke="#27ae60" stroke-width="3"/>
-                <path d="M-22,0 Q-10,-15 0,-10 Q10,-5 22,0" fill="#27ae60" opacity="0.7"/>
-                <path d="M-22,5 Q-5,20 10,10 Q18,5 22,0" fill="#27ae60" opacity="0.7"/>
-            </g>
-        </svg>
-        <div class="brand-logo-text reussi">
-            RÉUSSI<small>Académie des Langues</small>
-        </div>
+<nav>
+  <div class="wrap">
+    <a href="#top" class="brand"><img src="assets/logo-mark.jpg" alt="AI Gurukool logo">AI Gurukool</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#built">What I Built</a>
+      <a href="#stack">Stack</a>
+      <a href="#learn">Free Learning</a>
+      <a href="#contact">Contact</a>
     </div>
+    <a class="btn btn-primary" data-link="whatsapp" href="#" target="_blank" rel="noopener" style="padding:9px 16px;font-size:.85rem">Join Free</a>
+  </div>
+</nav>
 
-    <div class="brand-collab">in collaboration with</div>
-
-    <div class="brand-logo">
-        <!-- AI Gurukool Logo -->
-        <svg class="aigurukool-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <!-- Outer tech circle -->
-            <circle cx="50" cy="50" r="45" fill="none" stroke="#0ea5e9" stroke-width="3" stroke-dasharray="8 4"/>
-            <circle cx="50" cy="50" r="38" fill="none" stroke="#0ea5e9" stroke-width="1.5" opacity="0.5"/>
-            <!-- AI text -->
-            <text x="50" y="48" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="28" font-weight="900" fill="#1a1a2e">AI</text>
-            <!-- Small accent dot -->
-            <circle cx="68" cy="32" r="4" fill="#e84393"/>
-            <!-- GURU KOOL text -->
-            <text x="50" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#1a1a2e">GURU <tspan fill="#0ea5e9">KOOL</tspan></text>
-        </svg>
-        <div class="brand-logo-text aigurukool">
-            AI Guru<span>kool</span>
-        </div>
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">AI Gurukool</div>
+      <h1>AI Seekhega <span>India</span></h1>
+      <div class="name">Swapnil Tiwari</div>
+      <div class="roles"><b>L&amp;D Leader</b> · AI Transformationist · Solution Builder · Change Agent</div>
+      <p class="lead">I don't just teach AI. I build it, test it and run it live in real businesses. Then I teach it in simple Hinglish, free, so every Indian can use it.</p>
+      <div class="cta">
+        <a class="btn btn-primary" data-link="whatsapp" href="#" target="_blank" rel="noopener">Join WhatsApp Channel</a>
+        <a class="btn btn-ghost" data-link="youtube" href="#" target="_blank" rel="noopener">Watch on YouTube</a>
+      </div>
+      <div class="stats">
+        <div><b>10K+</b><span>YouTube learners</span></div>
+        <div><b>7.5K+</b><span>Instagram community</span></div>
+        <div><b>20+ yrs</b><span>in Learning &amp; Development</span></div>
+      </div>
     </div>
-</div>
-
-<!-- ── HERO ── -->
-<section class="hero">
-    <div class="hero-content">
-        <div class="badge">Free Virtual Workshop</div>
-        <h1>AI <em>Seekhega</em> India</h1>
-        <p style="font-size: 0.95rem; color: rgba(255,255,255,0.55); margin-bottom: 1rem; animation: fadeInUp 0.8s ease 0.3s both; letter-spacing: 0.5px;">
-            by <strong style="color: rgba(255,255,255,0.8);">Réussi Academy</strong> in collaboration with <strong style="color: rgba(255,255,255,0.8);">AI Gurukool</strong>
-        </p>
-        <p class="hero-sub">
-            Discover how Artificial Intelligence can transform your daily life, career, and ambitions — no tech background needed. Aao, AI seekhein!</p>
-        <div class="hero-details">
-            <div class="hero-detail">
-                <div class="icon">📅</div>
-                <span>Date: Coming Soon</span>
-            </div>
-            <div class="hero-detail">
-                <div class="icon">⏱️</div>
-                <span>60 Minutes</span>
-            </div>
-            <div class="hero-detail">
-                <div class="icon">💻</div>
-                <span>Virtual (Zoom/Meet)</span>
-            </div>
-            <div class="hero-detail">
-                <div class="icon">🎟️</div>
-                <span>100% Free</span>
-            </div>
-        </div>
-        <a href="#register" class="cta-btn">Register Now →</a>
+    <div class="photo reveal">
+      <div class="ring"></div>
+      <div class="frame"><img src="assets/swapnil.jpg" alt="Swapnil Tiwari, founder of AI Gurukool"></div>
+      <div class="badge"><img src="assets/logo.jpg" alt="AI Gurukool: AI Seekhega India"></div>
     </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">The Story</div>
+      <h2 class="sec-title">From training rooms to AI builds</h2>
+      <p>Two decades of building capability for large frontline workforces taught me one thing: technology only changes a business when people actually learn to use it.</p>
+      <p>AI Gurukool is my passion project. Every tool you see here was built hands-on, tested in the real world and deployed live. What I learn while building, I share openly with the community.</p>
+      <div class="tricolor"></div>
+    </div>
+    <div class="pillars reveal">
+      <div class="pill"><h3>AI First</h3><p>Every workflow gets one question: can AI do this better?</p></div>
+      <div class="pill"><h3>Builder</h3><p>Agents, bots and automations shipped to production.</p></div>
+      <div class="pill"><h3>Educator</h3><p>Complex AI explained simply, in the language India speaks.</p></div>
+      <div class="pill"><h3>Change Agent</h3><p>Helping teams move from AI curiosity to AI adoption.</p></div>
+    </div>
+  </div>
 </section>
 
-<div class="wave-divider">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path fill="#1a1032" d="M0,0 L1440,0 L1440,40 Q1080,80 720,40 Q360,0 0,40 Z"/>
-    </svg>
-</div>
-
-<!-- ── WHAT YOU'LL LEARN ── -->
-<section>
-    <div class="section-inner reveal">
-        <div class="section-label">What You'll Learn</div>
-        <h2 class="section-title">One Hour That Can Change How You Work & Live</h2>
-        <p class="section-subtitle">No jargon, no coding — just practical AI skills you can use starting today.</p>
-
-        <div class="learn-grid">
-            <div class="learn-card">
-                <div class="learn-icon">🤖</div>
-                <h3>AI Demystified</h3>
-                <p>Understand what AI really is — and why it's not just for engineers or techies.</p>
-            </div>
-            <div class="learn-card">
-                <div class="learn-icon">⚡</div>
-                <h3>Live Demos</h3>
-                <p>Watch AI write emails, plan meals, create designs, and solve real problems — live.</p>
-            </div>
-            <div class="learn-card">
-                <div class="learn-icon">💼</div>
-                <h3>AI for Your Career</h3>
-                <p>Resume building, interview prep, productivity hacks, and content creation with AI.</p>
-            </div>
-            <div class="learn-card">
-                <div class="learn-icon">🏠</div>
-                <h3>AI for Daily Life</h3>
-                <p>Meal planning, budgeting, kids' homework help, language translation, and more.</p>
-            </div>
-            <div class="learn-card">
-                <div class="learn-icon">🚀</div>
-                <h3>Entrepreneurship</h3>
-                <p>Marketing, customer support, and business automation — powered by AI tools.</p>
-            </div>
-            <div class="learn-card">
-                <div class="learn-icon">🎯</div>
-                <h3>Your AI Roadmap</h3>
-                <p>Walk away with a clear path to continue learning and mastering AI skills.</p>
-            </div>
-        </div>
+<!-- SOLUTIONS -->
+<section id="built">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Solutions I Built</div>
+      <h2 class="sec-title">Not demos. Deployed.</h2>
+      <p class="sec-sub">Real AI solutions, built and tested hands-on, running live for real businesses and teams.</p>
     </div>
+    <div class="grid">
+      <div class="card reveal">
+        <div class="icon">⭐</div>
+        <h3>ReviewGenAI</h3>
+        <div class="kind">Google SEO Review Generator</div>
+        <p>Helps local businesses collect genuine, well-written Google reviews from happy customers, boosting search ranking and visibility.</p>
+        <div class="tags"><span class="tag live">Live</span><span class="tag">SEO</span><span class="tag">Local Business</span></div>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🎙️</div>
+        <h3>Vaani</h3>
+        <div class="kind">Conversational AI Sales Agent</div>
+        <p>An AI agent that talks to website visitors, answers questions like a trained counsellor and captures qualified leads round the clock.</p>
+        <div class="tags"><span class="tag live">Live</span><span class="tag">Voice AI</span><span class="tag">Lead Gen</span></div>
+      </div>
+      <div class="card reveal">
+        <div class="icon">💬</div>
+        <h3>Insta Comment Reply Bot</h3>
+        <div class="kind">A ManyChat alternative</div>
+        <p>Auto-replies to Instagram comments and DMs with smart, on-brand responses. Turns engagement into conversations at a fraction of the cost.</p>
+        <div class="tags"><span class="tag live">Live</span><span class="tag">Automation</span><span class="tag">Social</span></div>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🎯</div>
+        <h3>AIPC</h3>
+        <div class="kind">AI Performance Coach</div>
+        <p>A custom AI coach trained on a sales playbook. Gives frontline teams instant, on-demand guidance to handle customers and close better.</p>
+        <div class="tags"><span class="tag live">Enterprise</span><span class="tag">Custom GPT</span><span class="tag">Sales Enablement</span></div>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🧠</div>
+        <h3>GenAI Training Modules</h3>
+        <div class="kind">Hands-on AI upskilling</div>
+        <p>Practical GenAI curriculum designed for enterprise teams: from prompting basics to building your own AI assistants.</p>
+        <div class="tags"><span class="tag live">Enterprise</span><span class="tag">L&amp;D</span><span class="tag">Workshops</span></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ── WHO IS THIS FOR ── -->
-<section class="who-section">
-    <div class="section-inner reveal">
-        <div class="section-label">Who Is This For</div>
-        <h2 class="section-title">Built for Everyone — From Every Walk of Life</h2>
-        <p class="section-subtitle">Whether you're a student, a professional, a homemaker, or an entrepreneur — this workshop is for you and your family.</p>
-
-        <div class="who-grid">
-            <div class="who-card">
-                <div class="who-emoji">🎓</div>
-                <h3>Students</h3>
-                <p>Supercharge your learning & career prep</p>
-            </div>
-            <div class="who-card">
-                <div class="who-emoji">💻</div>
-                <h3>Professionals</h3>
-                <p>10x your productivity at work</p>
-            </div>
-            <div class="who-card">
-                <div class="who-emoji">🏠</div>
-                <h3>Homemakers</h3>
-                <p>Smart home management with AI</p>
-            </div>
-            <div class="who-card">
-                <div class="who-emoji">📈</div>
-                <h3>Entrepreneurs</h3>
-                <p>Grow your business with AI tools</p>
-            </div>
-            <div class="who-card">
-                <div class="who-emoji">🎨</div>
-                <h3>Freelancers</h3>
-                <p>Create, market & earn smarter</p>
-            </div>
-            <div class="who-card">
-                <div class="who-emoji">👨‍👩‍👧‍👦</div>
-                <h3>Families</h3>
-                <p>Learn AI together as a family</p>
-            </div>
-        </div>
+<!-- STACK -->
+<section class="stack" id="stack">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Hands-on Stack</div>
+      <h2 class="sec-title">The tools I build with</h2>
+      <p class="sec-sub">Daily hands-on work across automation, agents and GenAI tooling.</p>
     </div>
+    <div class="chips reveal">
+      <div class="chip"><b>⚙</b>n8n Workflows</div>
+      <div class="chip"><b>🤖</b>AI Agents</div>
+      <div class="chip"><b>🎙</b>Voice AI</div>
+      <div class="chip"><b>✦</b>Custom GPTs</div>
+      <div class="chip"><b>◆</b>Claude &amp; Gemini</div>
+      <div class="chip"><b>✎</b>Prompt Engineering</div>
+      <div class="chip"><b>🔗</b>LLM API Integration</div>
+      <div class="chip"><b>💬</b>WhatsApp &amp; Meta APIs</div>
+      <div class="chip"><b>📊</b>Sheets Automation</div>
+      <div class="chip"><b>🌐</b>No-code / Low-code Apps</div>
+      <div class="chip"><b>🧩</b>Chatbot Flows</div>
+      <div class="chip"><b>🎓</b>AI Learning Design</div>
+    </div>
+  </div>
 </section>
 
-<!-- ── AGENDA ── -->
-<section>
-    <div class="section-inner reveal">
-        <div class="section-label">Workshop Agenda</div>
-        <h2 class="section-title">60 Minutes, Packed with Value</h2>
-        <p class="section-subtitle">Here's exactly what we'll cover together.</p>
-
-        <ul class="agenda-list">
-            <li class="agenda-item">
-                <div class="agenda-dot">1</div>
-                <div class="agenda-content">
-                    <span class="agenda-time">5 min</span>
-                    <h3>Welcome & Introduction</h3>
-                    <p>Meet your trainer, set the stage, and break the ice.</p>
-                </div>
-            </li>
-            <li class="agenda-item">
-                <div class="agenda-dot">2</div>
-                <div class="agenda-content">
-                    <span class="agenda-time">10 min</span>
-                    <h3>AI Demystified</h3>
-                    <p>What AI actually is — explained simply. You're already using it daily!</p>
-                </div>
-            </li>
-            <li class="agenda-item">
-                <div class="agenda-dot">3</div>
-                <div class="agenda-content">
-                    <span class="agenda-time">15 min</span>
-                    <h3>Live AI Demos</h3>
-                    <p>Watch AI write, create, translate, and solve problems — in real time.</p>
-                </div>
-            </li>
-            <li class="agenda-item">
-                <div class="agenda-dot">4</div>
-                <div class="agenda-content">
-                    <span class="agenda-time">10 min</span>
-                    <h3>AI for Your Life & Career</h3>
-                    <p>Tailored use cases for homemakers, students, professionals & entrepreneurs.</p>
-                </div>
-            </li>
-            <li class="agenda-item">
-                <div class="agenda-dot">5</div>
-                <div class="agenda-content">
-                    <span class="agenda-time">10 min</span>
-                    <h3>Interactive Q&A</h3>
-                    <p>Your questions answered. Live polls and discussions.</p>
-                </div>
-            </li>
-            <li class="agenda-item">
-                <div class="agenda-dot">6</div>
-                <div class="agenda-content">
-                    <span class="agenda-time">10 min</span>
-                    <h3>What's Next — Your AI Journey</h3>
-                    <p>Resources, roadmap, and how to continue mastering AI skills.</p>
-                </div>
-            </li>
-        </ul>
+<!-- RESOURCES -->
+<section id="learn">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Free Learning</div>
+      <h2 class="sec-title">Learn AI free. In your language.</h2>
+      <p class="sec-sub">Free classes, tutorials and daily AI updates. Pick your platform.</p>
     </div>
+    <div class="res-grid">
+      <a class="res yt reveal" data-link="youtube" href="#" target="_blank" rel="noopener">
+        <div class="top"><div class="logo"><svg viewBox="0 0 24 24"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15V9l5.8 3-5.8 3z"/></svg></div><div class="count">10K+</div></div>
+        <h3>YouTube</h3><p>Free AI classes and tool tutorials in Hinglish.</p><span class="go">Subscribe →</span>
+      </a>
+      <a class="res ig reveal" data-link="instagram" href="#" target="_blank" rel="noopener">
+        <div class="top"><div class="logo"><svg viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM12 2c-2.7 0-3 0-4.1.1C4.3 2.2 2.2 4.3 2.1 7.9 2 9 2 9.3 2 12s0 3 .1 4.1c.1 3.6 2.2 5.7 5.8 5.8 1.1.1 1.4.1 4.1.1s3 0 4.1-.1c3.6-.1 5.7-2.2 5.8-5.8.1-1.1.1-1.4.1-4.1s0-3-.1-4.1c-.1-3.6-2.2-5.7-5.8-5.8C15 2 14.7 2 12 2z"/></svg></div><div class="count">7.5K+</div></div>
+        <h3>Instagram</h3><p>Quick AI tips, reels and carousels.</p><span class="go">Follow →</span>
+      </a>
+      <a class="res wa reveal" data-link="whatsapp" href="#" target="_blank" rel="noopener">
+        <div class="top"><div class="logo"><svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1l-.9 1.2c-.2.2-.3.2-.6.1a8 8 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.6.7.6-.1 1.8-.7 2-1.5.3-.7.3-1.3.2-1.5l-.8-.3zM12 21.8a9.8 9.8 0 0 1-5-1.4l-3.6.9 1-3.5A9.8 9.8 0 1 1 12 21.8zM12 0a12 12 0 0 0-10.3 18L0 24l6.2-1.6A12 12 0 1 0 12 0z"/></svg></div><div class="count">Daily</div></div>
+        <h3>WhatsApp Channel</h3><p>AI news that matters, with a smart take.</p><span class="go">Join free →</span>
+      </a>
+      <a class="res ss reveal" data-link="substack" href="#" target="_blank" rel="noopener">
+        <div class="top"><div class="logo"><svg viewBox="0 0 24 24"><path d="M3 3h18v2.6H3zM3 8h18v2.6H3zM3 13h18v9l-9-5-9 5z"/></svg></div><div class="count">Weekly</div></div>
+        <h3>Substack</h3><p>Deep dives on AI agents, tools and trends.</p><span class="go">Read →</span>
+      </a>
+    </div>
+  </div>
 </section>
 
-<!-- ── REGISTER ── -->
-<section class="register-section" id="register">
-    <div class="section-inner reveal">
-        <div class="section-label">Register Now</div>
-        <h2 class="section-title">Reserve Your Spot — It's Free!</h2>
-        <p class="section-subtitle" style="margin: 0 auto 2rem;">Limited seats available. Fill the form below to secure your place.</p>
-
-    <div class="form-container" style="text-align: center; padding: 3rem 2rem;">
-    <p style="font-size: 1.1rem; color: #555; margin-bottom: 0.5rem;">📋 Fill a quick registration form to reserve your spot</p>
-    <p style="font-size: 0.9rem; color: #999; margin-bottom: 2rem;">Takes less than 2 minutes</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfFqQE_RrVsPlYuDYtmNBngDXHOP_Q78PDJVY1cUetO0aA58g/viewform" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #e84393, #c0392b); color: white; padding: 1rem 3rem; border-radius: 50px; font-size: 1.15rem; font-weight: 700; text-decoration: none; box-shadow: 0 8px 30px rgba(232, 67, 147, 0.4); transition: all 0.3s ease;">Register Now →</a>
-</div>
-</div>
-    </section>
-        <footer>
-    <div class="logo-area">
-        AI <span>Seekhega India</span>
+<!-- JOIN -->
+<section class="join" id="contact">
+  <div class="wrap">
+    <div class="join-box reveal">
+      <div class="eyebrow">Let's Connect</div>
+      <h2>AI seekhna hai? Shuru karte hain.</h2>
+      <p>Join the community for free classes and updates. For collaborations, talks or AI conversations, drop a mail.</p>
+      <div class="cta">
+        <a class="btn btn-primary" data-link="whatsapp" href="#" target="_blank" rel="noopener">Join the Community</a>
+        <a class="btn btn-ghost" href="mailto:aigurukoolyt@gmail.com">aigurukoolyt@gmail.com</a>
+      </div>
     </div>
-    <p>By <strong>Réussi Academy</strong> in collaboration with <strong>AI Gurukool</strong></p>
-    <p style="margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.5;">© 2026 Réussi Academy & AI Gurukool. All rights reserved.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand"><img src="assets/logo-mark.jpg" alt="">AI Gurukool · AI Seekhega India</div>
+    <div class="mails">
+      <a href="mailto:aigurukoolyt@gmail.com">aigurukoolyt@gmail.com</a>
+      <a href="mailto:swapnil.ivory@gmail.com">swapnil.ivory@gmail.com</a>
+    </div>
+    <div>© <span id="yr"></span> AI Gurukool</div>
+  </div>
 </footer>
 
-<!-- ── SCROLL REVEAL ── -->
 <script>
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.15 });
-    reveals.forEach(el => observer.observe(el));
+/* ===== EDIT YOUR LINKS HERE ===== */
+const LINKS = {
+  youtube:   "https://www.youtube.com/@YOUR_CHANNEL",
+  instagram: "https://www.instagram.com/YOUR_HANDLE",
+  whatsapp:  "https://whatsapp.com/channel/YOUR_CHANNEL_ID",
+  substack:  "https://YOUR_NAME.substack.com"
+};
+/* ================================ */
+document.querySelectorAll("[data-link]").forEach(a => { const u = LINKS[a.dataset.link]; if (u) a.href = u; });
+document.getElementById("yr").textContent = new Date().getFullYear();
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), {threshold: .12});
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 </script>
-
 </body>
 </html>
