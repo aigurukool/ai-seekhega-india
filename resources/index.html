@@ -62,6 +62,24 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:7
 @media(max-width:860px){.follow{grid-template-columns:1fr}}
 
 .list{padding:72px 0 96px}
+.gated{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;background:linear-gradient(135deg,var(--navy),var(--navy3));color:#fff;border-radius:10px;padding:36px;margin-bottom:40px;border:1px solid var(--gold)}
+.gated .kind{color:var(--gold2);font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.gated h3{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:10px}
+.gated p{color:#cfd7e3}
+.gated ul{margin-top:12px;padding-left:20px;color:#cfd7e3;font-size:.95rem}
+.gated form{display:flex;flex-direction:column;gap:10px}
+.gated input[type=email]{padding:14px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;font:inherit}
+.gated input[type=email]::placeholder{color:var(--muted-d)}
+.gated input[type=email]:focus{outline:none;border-color:var(--gold)}
+.gated button{padding:14px 20px;border:0;border-radius:8px;background:var(--gold);color:var(--navy);font:600 1rem Inter,system-ui,sans-serif;cursor:pointer}
+.gated button:hover{background:var(--gold2)}
+.gated button:disabled{opacity:.6;cursor:wait}
+.gated .hp{display:none}
+.gated .note{font-size:.82rem;color:var(--muted-d)}
+.gated .msg{font-size:.92rem;padding:10px 14px;border-radius:8px}
+.gated .msg.ok{background:rgba(37,211,102,.15);color:#b8f5cf}
+.gated .msg.bad{background:rgba(255,73,73,.15);color:#ffc4c4}
+@media(max-width:860px){.gated{grid-template-columns:1fr;padding:26px}}
 .list h2{font-size:clamp(1.7rem,3.4vw,2.3rem);margin-bottom:8px}
 .list .sub{color:var(--muted);margin-bottom:34px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
@@ -135,6 +153,24 @@ footer .links a:hover{color:var(--gold2)}
 
 <section class="list">
   <div class="wrap">
+    <div class="gated" id="n8n-guide">
+      <div>
+        <div class="kind">Free PDF &middot; Email par milegi</div>
+        <h3>N8N Local Installation Guide</h3>
+        <p>Apne laptop par N8N install karne ka poora step-by-step tareeka. Email daaliye, PDF seedha aapke inbox mein.</p>
+        <ul><li>Bonus: AI updates wala free newsletter</li></ul>
+      </div>
+      <div>
+        <form id="gate-form" novalidate>
+          <input type="email" name="EMAIL" placeholder="Aapka email" autocomplete="email" aria-label="Email" required>
+          <input type="text" name="email_address_check" value="" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <input type="hidden" name="locale" value="en">
+          <button type="submit">PDF email par bhejein</button>
+          <div class="note">Sahi email daaliye, guide wahin aayegi. Spam nahi bhejte.</div>
+          <div class="msg" role="status" hidden></div>
+        </form>
+      </div>
+    </div>
     <h2>Guides</h2>
     <div class="sub">Nayi guide aate hi yahan jud jaati hai.</div>
     <div class="grid" id="grid"></div>
@@ -195,6 +231,26 @@ function render(items){
   });
 }
 render(FALLBACK);
+
+/* N8N guide: delivered by Brevo's confirmation email after this form is submitted */
+(function () {
+  const ACTION = "https://57d32bab.sibforms.com/serve/MUIFAJ6iykQB4ASvrwi7fMUZS9NkFt6NDKK7oPDctOdDj9VTpptRyI9lmHh_DwN0nuurl0wAiOWqCZVUCXEzgBET_LZqKtJ6igEVRkhRKmy5DPxhrmRjF1Y9bQ2hvcU05A0S8N77P6DZPQ-ud5J1i2TAwKjd0wr4Xq9DHESVEYIHuX_I4gq2tlwAQJRmq6WiP3kPOkohKZGnFyMDcQ==";
+  const f = document.getElementById("gate-form"), msg = f.querySelector(".msg"), btn = f.querySelector("button");
+  function show(ok, t) { msg.hidden = false; msg.className = "msg " + (ok ? "ok" : "bad"); msg.textContent = t; }
+  f.addEventListener("submit", e => {
+    e.preventDefault();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.EMAIL.value.trim())) { show(false, "Sahi email daaliye, jaise naam@gmail.com"); return; }
+    btn.disabled = true;
+    fetch(ACTION + "?isAjax=1", { method: "POST", body: new FormData(f) })
+      .then(r => r.json())
+      .then(d => {
+        if (d && d.success) { f.reset(); show(true, "PDF aapke email par bhej di hai! Inbox check karein. Na dikhe toh Promotions ya Spam folder dekhein."); }
+        else show(false, "Bhej nahi paye. Email check karke dobara try karein.");
+      })
+      .catch(() => show(false, "Network issue. Thodi der baad try karein."))
+      .finally(() => { btn.disabled = false; });
+  });
+})();
 
 window.onSheet = function(res){
   try {
