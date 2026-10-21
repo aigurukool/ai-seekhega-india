@@ -185,6 +185,7 @@ footer .links a:hover{color:var(--gold2)}
       <a href="#built">Solutions</a>
       <a href="#stack">Expertise</a>
       <a href="#learn">Free Learning</a>
+      <a href="/posts/">Posts</a>
       <a href="#contact">Contact</a>
     </div>
     <a class="btn btn-wa btn-sm" data-link="chat" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Message</a>
@@ -393,5 +394,6 @@ document.getElementById("yr").textContent = new Date().getFullYear();
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), {threshold: .1});
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 </script>
+<script src="/assets/aig.js" defer></script>
 </body>
 </html>

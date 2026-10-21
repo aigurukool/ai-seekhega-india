@@ -1,0 +1,11 @@
+title: AI Gurukool
+description: Practical AI aur automation, Hinglish mein.
+url: https://www.aigurukool.in
+author: Swapnil Tiwari
+permalink: /posts/:title/
+plugins:
+  - jekyll-feed
+feed:
+  path: feed.xml
+exclude:
+  - README.md

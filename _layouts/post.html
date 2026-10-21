@@ -1,0 +1,31 @@
+---
+layout: base
+---
+<style>
+.post{font-size:1.06rem}
+.post h2{font-size:1.6rem;margin:36px 0 12px}
+.post h3{font-size:1.25rem;margin:28px 0 10px}
+.post p,.post ul,.post ol,.post blockquote,.post pre{margin-bottom:18px}
+.post ul,.post ol{padding-left:24px}
+.post a{color:#9a7a3a;text-decoration:underline}
+.post img{max-width:100%;height:auto;border-radius:8px}
+.post blockquote{border-left:3px solid var(--gold);padding-left:16px;color:var(--muted)}
+.post code{background:#ece8de;padding:2px 6px;border-radius:4px;font-size:.92em}
+.post pre{background:var(--navy);color:#e6ebf2;padding:16px;border-radius:8px;overflow-x:auto}
+.post pre code{background:none;padding:0}
+.post iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:8px}
+.back{display:inline-block;margin-top:24px;color:var(--muted);font-size:.92rem}
+</style>
+<header class="head">
+  <div class="narrow">
+    <div class="label">{{ page.date | date: "%d %b %Y" }}</div>
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}<p>{{ page.description }}</p>{% endif %}
+  </div>
+</header>
+<main>
+  <article class="narrow post">
+    {{ content }}
+    <a class="back" href="/posts/">&larr; Saare posts</a>
+  </article>
+</main>
