@@ -3,110 +3,83 @@
 <head>
 <meta charset="utf-8">
 <style>
-@font-face{font-family:Baloo;src:url(baloo-2-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Anton;src:url(anton-latin-400-normal.woff2)}
 @font-face{font-family:Baloo;src:url(baloo-2-latin-700-normal.woff2);font-weight:700}
 @font-face{font-family:Baloo;src:url(baloo-2-latin-800-normal.woff2);font-weight:800}
-:root{--teal1:#0f5a5c;--teal2:#06282b;--saffron:#ffb12b;--marigold:#ff7a29;--cream:#fff6e6;--mint:#7ff0d0;--ink:#0b1f22}
+/* Themes: one accent pair per background */
+body.fire{--a1:#ffd23f;--a2:#ff6a00;--glow:rgba(255,120,20,.75);--deep:#7a1e00}
+body.neon{--a1:#5ff2ff;--a2:#c25cff;--glow:rgba(140,90,255,.8);--deep:#2a0a6b}
+body.gold{--a1:#ffe08a;--a2:#ffae2b;--glow:rgba(255,190,60,.7);--deep:#5a3a00}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:1600px;height:900px;overflow:hidden}
-body{font-family:Baloo,sans-serif;color:var(--cream);
-  background:radial-gradient(900px 700px at 78% 45%,#1a7a76 0%,transparent 60%),radial-gradient(1200px 900px at 20% 30%,var(--teal1) 0%,var(--teal2) 75%);position:relative}
-body::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,246,230,.09) 2px,transparent 2px);background-size:34px 34px}
-.glow{position:absolute;width:620px;height:620px;right:110px;top:90px;border-radius:50%;background:radial-gradient(circle,rgba(255,177,43,.38),transparent 65%)}
-.left{position:absolute;left:84px;top:64px;width:860px}
-.tag{display:inline-flex;align-items:center;gap:12px;background:var(--cream);color:var(--ink);font-weight:800;font-size:34px;padding:6px 26px 2px;border-radius:999px;transform:rotate(-3deg);box-shadow:6px 6px 0 var(--marigold)}
-.tag i{width:14px;height:14px;border-radius:50%;background:var(--marigold);display:block;margin-top:-4px}
-h1{margin-top:34px;font-weight:800;line-height:.88;letter-spacing:-1px}
-h1 .l1{display:block;white-space:nowrap;font-size:140px;color:var(--cream);text-shadow:0 8px 0 rgba(0,0,0,.25)}
-h1 .l2{display:block;white-space:nowrap;font-size:150px;color:var(--saffron);text-shadow:0 8px 0 #b3540f}
-h1 .small{font-size:92px;color:var(--cream);text-shadow:0 6px 0 rgba(0,0,0,.25);margin-right:18px}
-.sub{margin-top:26px;display:inline-block;font-weight:700;font-size:40px;color:var(--ink);background:var(--mint);padding:8px 26px 2px;border-radius:18px;box-shadow:0 8px 0 rgba(0,0,0,.25)}
-.path{position:absolute;left:84px;right:84px;bottom:104px;display:flex;justify-content:space-between;align-items:flex-start}
-.path::before{content:"";position:absolute;left:36px;right:36px;top:34px;border-top:6px dashed rgba(255,246,230,.45)}
-.stop{position:relative;width:200px;text-align:center}
-.stop b{display:grid;place-items:center;margin:0 auto;width:72px;height:72px;border-radius:50%;background:var(--teal2);border:5px solid var(--saffron);color:var(--saffron);font-size:38px;font-weight:800;padding-top:6px}
-.stop:last-child b{background:var(--saffron);color:var(--ink)}
-.stop span{display:block;margin-top:8px;font-size:30px;font-weight:700;color:var(--cream)}
-.foot{position:absolute;left:0;right:0;bottom:30px;display:flex;align-items:center;justify-content:center;gap:24px;font-weight:700;font-size:30px;letter-spacing:6px}
-.foot::before,.foot::after{content:"";height:3px;width:300px;background:linear-gradient(90deg,transparent,var(--saffron))}
+html,body{width:1600px;height:900px;overflow:hidden;background:#000}
+body{position:relative;font-family:Baloo,sans-serif;color:#fff}
+.bg{position:absolute;inset:0;background-size:cover;background-position:center 70%}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.35) 48%,rgba(0,0,0,0) 70%),linear-gradient(0deg,rgba(0,0,0,.55) 0%,transparent 22%)}
+.bot{position:absolute;right:30px;bottom:56px;height:770px;filter:drop-shadow(0 0 34px var(--glow)) drop-shadow(0 30px 30px rgba(0,0,0,.6))}
+.left{position:absolute;left:70px;top:58px;width:940px}
+.tag{display:inline-block;font-family:Anton,sans-serif;font-size:46px;letter-spacing:1px;padding:4px 26px;border-radius:14px;background:#0b0b0b;border:4px solid var(--a1);color:#fff;transform:rotate(-4deg);box-shadow:0 0 24px var(--glow)}
+.tag b{color:var(--a1);font-weight:400}
+h1{margin-top:22px;font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:1px}
+h1 .row{display:block;width:max-content;white-space:nowrap}
+.l1{font-size:150px;color:#fff;
+  text-shadow:0 2px 0 #cfd6e0,0 4px 0 #aeb7c4,0 6px 0 #8c96a6,0 8px 0 #6c7586,0 10px 0 #4e5666,0 14px 18px rgba(0,0,0,.7),0 0 40px rgba(255,255,255,.25)}
+.l2wrap{position:relative;display:inline-block}
+.l2{font-size:180px;background:linear-gradient(180deg,var(--a1) 15%,var(--a2) 85%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:3px rgba(255,255,255,.55);position:relative;z-index:1}
+.l2shadow{position:absolute;left:0;top:0;font-size:180px;color:var(--deep);z-index:0;
+  text-shadow:0 2px 0 var(--deep),0 4px 0 var(--deep),0 6px 0 var(--deep),0 8px 0 var(--deep),0 10px 0 var(--deep),0 12px 0 var(--deep),0 16px 24px rgba(0,0,0,.8),0 0 60px var(--glow)}
+.pre{font-family:Baloo,sans-serif;font-weight:800;font-size:88px;color:#fff;text-transform:none;margin-right:20px;text-shadow:0 6px 0 rgba(0,0,0,.5),0 0 30px var(--glow);vertical-align:18px}
+.sub{margin-top:26px;display:inline-block;font-weight:800;font-size:44px;line-height:1.2;color:#111;padding:10px 30px 4px;background:linear-gradient(90deg,var(--a1),var(--a2));border-radius:12px;transform:skewX(-8deg);box-shadow:0 10px 0 rgba(0,0,0,.45),0 0 30px var(--glow)}
+.sub span{display:inline-block;transform:skewX(8deg)}
+.chips{margin-top:30px;display:flex;gap:16px;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:12px;padding:10px 20px 6px 12px;border-radius:999px;background:rgba(10,10,20,.62);border:2px solid rgba(255,255,255,.18);font-weight:800;font-size:32px;backdrop-filter:blur(6px)}
+.chip i{font-style:normal;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,var(--a1),var(--a2));color:#111;font-size:28px;padding-top:4px}
+.foot{position:absolute;left:0;right:0;bottom:22px;display:flex;align-items:center;justify-content:center;gap:26px;font-family:Anton,sans-serif;font-size:34px;letter-spacing:7px}
+.foot::before,.foot::after{content:"";height:3px;width:280px;background:linear-gradient(90deg,transparent,var(--a2))}
 .foot::after{transform:scaleX(-1)}
-.foot em{font-style:normal;color:var(--saffron)}
-.bot{position:absolute;right:70px;top:40px;width:600px}
+.foot em{font-style:normal;color:var(--a2)}
 </style>
 </head>
-<body>
-<div class="glow"></div>
+<body class="fire">
+<div class="bg" id="bg"></div>
+<div class="shade"></div>
+<img class="bot" id="bot" alt="">
 <div class="left">
-  <div class="tag"><i></i><span id="tag">NAYA POST</span></div>
-  <h1><span class="l1" id="l1">AI AUTOMATION</span><span class="l2"><span class="small" id="pre">ka</span><span id="l2">ROADMAP</span></span></h1>
-  <div class="sub" id="sub">Zero se pehla bot tak, sirf 8 hafte</div>
+  <div class="tag" id="tag">NAYA <b>POST</b></div>
+  <h1>
+    <span class="row l1" id="l1"></span>
+    <span class="row"><span class="pre" id="pre"></span><span class="l2wrap"><span class="l2shadow" id="l2s"></span><span class="l2" id="l2"></span></span></span>
+  </h1>
+  <div class="sub" id="subw"><span id="sub"></span></div>
+  <div class="chips" id="chips"></div>
 </div>
-
-<!-- Mascot: "Deepu", a round little bot with a diya flame antenna -->
-<svg class="bot" viewBox="-60 0 620 620" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <radialGradient id="body" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe9e7"/></radialGradient>
-    <radialGradient id="screen" cx="50%" cy="35%" r="75%"><stop offset="0" stop-color="#1d3b40"/><stop offset="1" stop-color="#0a1b1e"/></radialGradient>
-    <radialGradient id="flame" cx="50%" cy="70%" r="70%"><stop offset="0" stop-color="#fff3b0"/><stop offset=".5" stop-color="#ffb12b"/><stop offset="1" stop-color="#ff6a1f"/></radialGradient>
-  </defs>
-  <!-- shadow -->
-  <ellipse cx="270" cy="598" rx="170" ry="18" fill="rgba(0,0,0,.28)"/>
-  <!-- flag arm (left side of image) -->
-  <path d="M152 410 Q80 410 44 350" stroke="#dfe9e7" stroke-width="34" stroke-linecap="round" fill="none"/>
-  <rect x="30" y="120" width="10" height="250" rx="5" fill="#8a5a2b"/>
-  <path d="M40 126 L-50 156 L40 190 Z" fill="#ff7a29"/>
-  <circle cx="40" cy="350" r="24" fill="#ffffff"/>
-  <!-- body -->
-  <rect x="150" y="360" width="240" height="210" rx="100" fill="url(#body)"/>
-  <clipPath id="badge"><circle cx="270" cy="462" r="50"/></clipPath>
-  <circle cx="270" cy="462" r="56" fill="#ffb12b"/>
-  <circle cx="270" cy="462" r="50" fill="#ffffff"/>
-  <image href="../../logo-mark.jpg" x="228" y="428" width="84" height="68" preserveAspectRatio="xMidYMid meet" clip-path="url(#badge)"/>
-  <!-- right arm waving -->
-  <path d="M388 410 Q450 400 470 340" stroke="#dfe9e7" stroke-width="34" stroke-linecap="round" fill="none"/>
-  <circle cx="472" cy="334" r="26" fill="#ffffff"/>
-  <!-- feet -->
-  <ellipse cx="220" cy="574" rx="44" ry="24" fill="#cfdcd9"/>
-  <ellipse cx="320" cy="574" rx="44" ry="24" fill="#cfdcd9"/>
-  <!-- antenna + diya flame -->
-  <rect x="263" y="70" width="14" height="70" rx="7" fill="#cfdcd9"/>
-  <path d="M236 92 Q270 112 304 92 Q300 78 270 76 Q240 78 236 92Z" fill="#c8682b"/>
-  <path d="M270 16 C292 44 296 62 282 78 C274 86 266 86 258 78 C244 62 250 40 270 16Z" fill="url(#flame)"/>
-  <!-- head -->
-  <rect x="96" y="130" width="348" height="270" rx="130" fill="url(#body)"/>
-  <rect x="86" y="236" width="30" height="70" rx="15" fill="#ffb12b"/>
-  <rect x="424" y="236" width="30" height="70" rx="15" fill="#ffb12b"/>
-  <rect x="136" y="170" width="268" height="190" rx="92" fill="url(#screen)"/>
-  <!-- happy eyes -->
-  <path d="M200 268 Q226 236 252 268" stroke="#7ff0d0" stroke-width="16" stroke-linecap="round" fill="none"/>
-  <path d="M288 268 Q314 236 340 268" stroke="#7ff0d0" stroke-width="16" stroke-linecap="round" fill="none"/>
-  <!-- cheeks + smile -->
-  <ellipse cx="188" cy="306" rx="22" ry="12" fill="#ff7a8a" opacity=".55"/>
-  <ellipse cx="352" cy="306" rx="22" ry="12" fill="#ff7a8a" opacity=".55"/>
-  <path d="M248 304 Q270 326 292 304" stroke="#7ff0d0" stroke-width="10" stroke-linecap="round" fill="none"/>
-  <!-- shine -->
-  <ellipse cx="190" cy="198" rx="30" ry="12" fill="#ffffff" opacity=".18" transform="rotate(-20 190 198)"/>
-  <!-- sparkles -->
-  <path d="M500 140 l8 22 22 8 -22 8 -8 22 -8 -22 -22 -8 22 -8z" fill="#ffb12b"/>
-  <path d="M40 470 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6z" fill="#7ff0d0"/>
-</svg>
-
-<div class="path" id="path"></div>
 <div class="foot">AI AUTOMATION KI ABC <em>BY AI GURUKOOL</em></div>
-
 <script>
-const D = window.THUMB || {};
-for (const k of ["tag","l1","pre","l2","sub"]) if (D[k] !== undefined) document.getElementById(k).textContent = D[k];
+const D = Object.assign({theme:"fire", pose:"point", tag:"NAYA POST", l1:"", pre:"", l2:"", sub:"", chips:[]}, window.THUMB || {});
+document.body.className = D.theme;
+document.getElementById("bg").style.backgroundImage = "url(art/bg-" + D.theme + ".jpg)";
+document.getElementById("bot").src = "art/mascot-" + D.pose + ".png";
+const tagWords = D.tag.split(" "); const last = tagWords.pop();
+const tag = document.getElementById("tag"); tag.textContent = tagWords.join(" ") + (tagWords.length ? " " : "");
+const b = document.createElement("b"); b.textContent = last; tag.appendChild(b);
+document.getElementById("l1").textContent = D.l1;
+document.getElementById("pre").textContent = D.pre;
+document.getElementById("l2").textContent = D.l2;
+document.getElementById("l2s").textContent = D.l2;
+document.getElementById("sub").textContent = D.sub;
+if (!D.l1) document.getElementById("l1").style.display = "none";
 if (!D.pre) document.getElementById("pre").style.display = "none";
-for (const el of document.querySelectorAll("h1 .l1, h1 .l2")) { let fs = parseFloat(getComputedStyle(el).fontSize); while (el.scrollWidth > 860 && fs > 70) { fs -= 4; el.style.fontSize = fs + "px"; } }
-const steps = D.steps || [];
-const path = document.getElementById("path");
-if (!steps.length) path.style.display = "none";
-steps.forEach((s, i) => {
-  const d = document.createElement("div"); d.className = "stop";
-  d.innerHTML = "<b>" + (i + 1) + "</b><span></span>"; d.querySelector("span").textContent = s;
-  path.appendChild(d);
+if (!D.sub) document.getElementById("subw").style.display = "none";
+const chips = document.getElementById("chips");
+(D.chips || []).slice(0, 6).forEach((c, i) => {
+  const d = document.createElement("div"); d.className = "chip";
+  d.innerHTML = "<i>" + (i + 1) + "</i><span></span>"; d.querySelector("span").textContent = c; chips.appendChild(d);
 });
+/* Shrink headline rows until they fit the text column */
+const MAX = 900;
+const l1 = document.getElementById("l1");
+let s = 150; while (l1.offsetWidth > MAX && s > 70) { s -= 4; l1.style.fontSize = s + "px"; }
+const row2 = document.getElementById("l2").closest(".row");
+let s2 = 180; while (row2.offsetWidth > MAX && s2 > 80) { s2 -= 4; for (const id of ["l2","l2s"]) document.getElementById(id).style.fontSize = s2 + "px"; }
 </script>
 </body>
 </html>

@@ -1,7 +1,8 @@
 """Render a 1600x900 AI Gurukool thumbnail from template.html.
 
 Usage: python3 _tools/thumb/render.py spec.json out.jpg
-spec.json keys: tag, l1, pre, l2, sub, steps (list, optional)
+spec.json keys: theme (fire|neon|gold), pose (wave|point|think|celebrate|laptop),
+           tag, l1, pre, l2, sub, chips (list, optional)
 """
 import json
 import os
@@ -18,7 +19,9 @@ def render(spec, out):
         pg = b.new_page(viewport={"width": 1600, "height": 900})
         pg.add_init_script("window.THUMB = " + json.dumps(spec) + ";")
         pg.goto("file://" + os.path.join(HERE, "template.html"))
+        pg.wait_for_load_state("networkidle")
         pg.evaluate("document.fonts.ready")
+        pg.wait_for_function("[...document.images].every(i => i.complete)")
         pg.screenshot(path=out, type="jpeg", quality=88)
         b.close()
 
