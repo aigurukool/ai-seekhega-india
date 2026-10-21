@@ -35,16 +35,13 @@
     ".aig-nl input[type=email]:focus{outline:none;border-color:#c9a45c}",
     ".aig-nl button{padding:14px 22px;border-radius:8px;border:0;background:#c9a45c;color:#0f1d31;font:600 .95rem Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}",
     ".aig-nl button:hover{background:#e0c285}",
-    ".aig-nl .input--hidden{display:none}",
-    ".aig-nl .sib-form-message-panel{display:none;margin-top:12px;font-size:.92rem;padding:10px 14px;border-radius:8px}",
-    "#success-message.sib-form-message-panel{background:rgba(37,211,102,.15);color:#b8f5cf}",
-    "#error-message.sib-form-message-panel{background:rgba(255,73,73,.15);color:#ffc4c4}",
-    ".aig-nl .sib-form-message-panel--active{display:block}",
-    ".aig-nl .sib-input,.aig-nl .form__entry{flex:1;min-width:0;display:flex;flex-direction:column}",
-    ".aig-nl .entry__error{color:#ffc4c4;font-size:.85rem;margin-top:6px}",
-    ".aig-nl .entry__error:empty{display:none}",
+    ".aig-nl .hp{display:none}",
+    ".aig-nl .msg{margin-top:12px;font-size:.92rem;padding:10px 14px;border-radius:8px}",
+    ".aig-nl .msg.ok{background:rgba(37,211,102,.15);color:#b8f5cf}",
+    ".aig-nl .msg.bad{background:rgba(255,73,73,.15);color:#ffc4c4}",
     ".aig-nl .box{flex:1;min-width:260px;max-width:460px}",
     ".aig-nl .box form{max-width:none}",
+    ".aig-nl button:disabled{opacity:.6;cursor:wait}",
     "@media(max-width:560px){.aig-nl form{flex-direction:column}.aig-nl{padding:44px 0}}"
   ].join("");
 
@@ -57,6 +54,7 @@
   /* ---------- Newsletter banner (just above the footer) ---------- */
   var nl = document.createElement("section");
   nl.className = "aig-nl";
+  nl.id = "newsletter";
   nl.innerHTML =
     '<div class="in">' +
       '<div class="tx">' +
@@ -64,35 +62,36 @@
         '<h3>AI race mein peeche mat rehna</h3>' +
         '<p>Roz ki AI updates aur automation tips, seedha aapke inbox mein. Bilkul free.</p>' +
       '</div>' +
-      '<div class="box sib-form" id="sib-form-container">' +
-        '<div id="sib-container">' +
-          '<form id="sib-form" method="POST" data-type="subscription">' +
-            '<div class="sib-input"><div class="form__entry">' +
-              '<input class="input" type="email" id="EMAIL" name="EMAIL" placeholder="Aapka email" autocomplete="email" required data-required="true">' +
-              '<label class="entry__error entry__error--primary"></label>' +
-            '</div></div>' +
-            '<input type="text" name="email_address_check" value="" class="input--hidden" tabindex="-1" autocomplete="off">' +
-            '<input type="hidden" name="locale" value="en">' +
-            '<button class="sib-form-block__button sib-form-block__button-with-loader" form="sib-form" type="submit">Subscribe</button>' +
-          '</form>' +
-        '</div>' +
-        '<div id="success-message" class="sib-form-message-panel"><div class="sib-form-message-panel__text"><span class="sib-form-message-panel__inner-text">Ho gaya! Welcome to AI Gurukool newsletter.</span></div></div>' +
-        '<div id="error-message" class="sib-form-message-panel"><div class="sib-form-message-panel__text"><span class="sib-form-message-panel__inner-text">Subscribe nahi ho paya. Email check karke dobara try karein.</span></div></div>' +
+      '<div class="box">' +
+        '<form novalidate>' +
+          '<input type="email" name="EMAIL" placeholder="Aapka email" autocomplete="email" aria-label="Email" required>' +
+          '<input type="text" name="email_address_check" value="" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+          '<input type="hidden" name="locale" value="en">' +
+          '<button type="submit">Subscribe</button>' +
+        '</form>' +
+        '<div class="msg" role="status" hidden></div>' +
       '</div>' +
     '</div>';
-  nl.querySelector("form").setAttribute("action", BREVO_ACTION);
   var footer = document.querySelector("footer");
   if (footer) footer.parentNode.insertBefore(nl, footer); else document.body.appendChild(nl);
 
-  /* Brevo's own script handles the submit and success/error messages. */
-  window.LOCALE = "en";
-  window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = window.GENERIC_INVALID_MESSAGE = "Sahi email daaliye.";
-  window.REQUIRED_ERROR_MESSAGE = "Email zaroori hai.";
-  window.AUTOHIDE = false;
-  var bs = document.createElement("script");
-  bs.src = "https://sibforms.com/forms/end-form/build/main.js";
-  bs.defer = true;
-  document.body.appendChild(bs);
+  /* Submit straight to Brevo (it returns JSON when isAjax=1). */
+  var form = nl.querySelector("form"), msg = nl.querySelector(".msg"), btn = nl.querySelector("button");
+  function show(ok, text) { msg.hidden = false; msg.className = "msg " + (ok ? "ok" : "bad"); msg.textContent = text; }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = form.EMAIL.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { show(false, "Sahi email daaliye, jaise naam@gmail.com"); return; }
+    btn.disabled = true;
+    fetch(BREVO_ACTION + "?isAjax=1", { method: "POST", body: new FormData(form) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.success) { form.reset(); show(true, "Ho gaya! Welcome to AI Gurukool newsletter."); }
+        else show(false, "Subscribe nahi ho paya. Email check karke dobara try karein.");
+      })
+      .catch(function () { show(false, "Network issue. Thodi der baad try karein."); })
+      .then(function () { btn.disabled = false; });
+  });
 
   /* ---------- WhatsApp channel pop-up (once per visitor) ---------- */
   var KEY = "aig_wa_popup";
