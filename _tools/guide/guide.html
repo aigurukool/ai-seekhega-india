@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>N8N Local Installation Guide | AI Gurukool</title>
+<style>
+@font-face{font-family:Anton;src:url(anton-latin-400-normal.woff2)}
+@font-face{font-family:Baloo;src:url(baloo-2-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Baloo;src:url(baloo-2-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Inter;src:url(inter-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:Inter;src:url(inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Mono;src:url(jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:Mono;src:url(jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+@page{size:A4;margin:0}
+:root{--ink:#14161c;--muted:#5a6170;--line:#e6e2da;--paper:#fffdf8;--fire1:#ffd23f;--fire2:#ff6a00;--deep:#0d0f14;--blue:#2f8cff;--green:#1fae5b;--wa:#25d366}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;color:var(--ink);font-size:10.5pt;line-height:1.55;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+a{color:inherit;text-decoration:none}
+.page{width:210mm;height:297mm;position:relative;overflow:hidden;page-break-after:always;background:var(--paper);padding:0 16mm}
+.page:last-child{page-break-after:auto}
+
+/* brand strip on every page */
+.brand{display:flex;align-items:center;justify-content:space-between;gap:10px;height:15mm;border-bottom:1px solid var(--line);margin-bottom:7mm;font-size:8.6pt;color:var(--muted)}
+.brand .b{display:flex;align-items:center;gap:8px;font-family:Baloo;font-weight:800;font-size:11pt;color:var(--ink)}
+.brand img{width:8mm;height:8mm;border-radius:2mm;object-fit:cover}
+.brand .links{display:flex;gap:12px}
+.brand .links a{display:flex;align-items:center;gap:4px}
+.brand .links i{display:inline-block;width:7px;height:7px;border-radius:50%}
+.i-ig{background:#dc2743}.i-wa{background:var(--wa)}.i-web{background:var(--fire2)}
+.pno{position:absolute;bottom:8mm;left:16mm;right:16mm;display:flex;justify-content:space-between;font-size:8pt;color:var(--muted)}
+
+h1,h2,h3{font-family:Baloo;font-weight:800;line-height:1.1}
+h2{font-size:22pt;margin-bottom:3mm}
+h2 em{font-style:normal;color:var(--fire2)}
+h3{font-size:13.5pt;margin:4mm 0 2mm}
+p{margin-bottom:2.6mm}
+ul,ol{margin:0 0 3mm 5mm}
+li{margin-bottom:1.2mm}
+b{font-weight:700}
+.kicker{font-family:Anton;letter-spacing:.12em;font-size:10pt;color:var(--fire2);margin-bottom:1mm}
+
+/* step header */
+.step{display:flex;align-items:center;gap:4mm;margin:5mm 0 2.5mm}
+.step .n{flex:none;width:12mm;height:12mm;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,var(--fire1),var(--fire2));font-family:Anton;font-size:17pt;color:#1a0d00;box-shadow:0 2px 0 #b34700}
+.step h3{margin:0;font-size:15pt}
+.step .t{margin-left:auto;font-size:8pt;font-weight:600;color:var(--muted);background:#f2eee6;border-radius:99px;padding:1mm 3mm;white-space:nowrap}
+
+/* terminal mockup */
+.term{background:#0f1117;border-radius:3mm;overflow:hidden;margin:2.5mm 0 3.5mm;box-shadow:0 3mm 6mm -3mm rgba(0,0,0,.35)}
+.term .bar{display:flex;align-items:center;gap:1.6mm;background:#1d2130;padding:1.8mm 3mm;font-size:7.5pt;color:#9aa3b5}
+.term .bar i{width:2.4mm;height:2.4mm;border-radius:50%;background:#ff5f57}.term .bar i:nth-child(2){background:#febc2e}.term .bar i:nth-child(3){background:#28c840}
+.term .bar span{margin-left:2mm}
+.term pre{font-family:Mono;font-size:8.6pt;line-height:1.55;color:#d7dbe6;padding:3mm 4mm;white-space:pre-wrap;word-break:break-all}
+.term .p{color:#7f8aa3}.term .c{color:#ffd23f;font-weight:700}.term .o{color:#8fe3a8}.term .m{color:#7f8aa3}
+
+/* browser mockup */
+.browser{border:1px solid #d8d3c8;border-radius:3mm;overflow:hidden;margin:2.5mm 0 3.5mm;background:#fff}
+.browser .bar{display:flex;align-items:center;gap:3mm;background:#f1efe9;padding:2mm 3mm;border-bottom:1px solid #e3ded3}
+.browser .url{flex:1;background:#fff;border:1px solid #ddd8cc;border-radius:99px;padding:1mm 3.5mm;font-family:Mono;font-size:8.3pt}
+.browser .body{padding:3.5mm 8mm;display:grid;place-items:center}
+.form{width:70mm;display:flex;flex-direction:column;gap:1.4mm;font-size:8.5pt}
+.form .ttl{font-weight:700;font-size:11pt;text-align:center;margin-bottom:1mm}
+.form .f{border:1px solid #d9d4ca;border-radius:2mm;padding:1.6mm 2.5mm;color:#8c93a0}
+.form .btn{background:#ff6d5a;color:#fff;text-align:center;border-radius:2mm;padding:2mm;font-weight:700}
+
+/* callouts */
+.box{border-radius:2.5mm;padding:3mm 4mm;margin:2.5mm 0 3.5mm;font-size:9.6pt}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+.box .h{font-weight:700;margin-bottom:1mm}
+.tip{background:#eef8f1;border:1px solid #bfe6cc}
+.tip .h{color:#137a3f}
+.warn{background:#fff4e6;border:1px solid #ffd2a1}
+.warn .h{color:#c25100}
+.info{background:#eef4ff;border:1px solid #c9dafc}
+.info .h{color:#1e5fd0}
+
+code{font-family:Mono;font-size:8.8pt;background:#f1ede4;border-radius:1mm;padding:.2mm 1.2mm}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+table{width:100%;border-collapse:collapse;font-size:9.2pt;margin:2mm 0 4mm}
+th,td{text-align:left;padding:2mm 2.5mm;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f4f0e7;font-weight:700}
+td code{white-space:nowrap}
+.card{border:1px solid var(--line);border-radius:2.5mm;padding:3mm 3.5mm;background:#fff}
+.card > b{display:block;font-size:10.5pt;margin-bottom:.5mm}
+.card > span{color:var(--muted);font-size:9pt;display:block}
+.grid3{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+.mascot{position:absolute;pointer-events:none}
+
+/* cover */
+.cover{padding:0;background:#000;color:#fff}
+.cover .bg{position:absolute;inset:0;background:url(bg-fire.jpg) center 80%/cover}
+.cover .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.15) 40%,rgba(0,0,0,.75))}
+.cover .top{position:relative;display:flex;align-items:center;justify-content:space-between;padding:9mm 14mm 0}
+.cover .top .b{display:flex;align-items:center;gap:3mm;font-family:Baloo;font-weight:800;font-size:15pt}
+.cover .top img{width:13mm;height:13mm;border-radius:3mm}
+.cover .links{position:relative;display:flex;gap:3mm;padding:5mm 14mm 0;flex-wrap:wrap}
+.cover .links a{display:flex;align-items:center;gap:2mm;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:1.6mm 4mm;font-size:9pt;font-weight:600}
+.cover .links i{width:3mm;height:3mm;border-radius:50%;display:inline-block}
+.cover .tag{position:relative;display:inline-block;margin:16mm 14mm 0;font-family:Anton;font-size:15pt;letter-spacing:.06em;background:#0b0b0b;border:2px solid var(--fire1);padding:1mm 5mm;border-radius:3mm;transform:rotate(-3deg)}
+.cover .tag b{color:var(--fire1);font-weight:400}
+.cover h1{position:relative;font-family:Anton;font-weight:400;text-transform:uppercase;padding:5mm 14mm 0;line-height:.98}
+.cover h1 .a{display:block;font-size:52pt;text-shadow:0 1.5mm 0 #555,0 3mm 5mm rgba(0,0,0,.7)}
+.cover h1 .g{display:block;font-size:64pt;background:linear-gradient(180deg,var(--fire1) 15%,var(--fire2) 85%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cover .sub{position:relative;display:inline-block;margin:4mm 14mm 0;background:linear-gradient(90deg,var(--fire1),var(--fire2));color:#111;font-family:Baloo;font-weight:800;font-size:14pt;padding:1.5mm 5mm .5mm;border-radius:2.5mm}
+.cover .what{position:relative;margin:7mm 14mm 0;max-width:95mm;font-size:10.5pt;color:#e9e3d6}
+.cover .what li{margin-bottom:1.5mm}
+.cover .bot{position:absolute;right:6mm;bottom:22mm;width:105mm;filter:drop-shadow(0 0 8mm rgba(255,120,20,.6))}
+.cover .foot{position:absolute;left:0;right:0;bottom:9mm;text-align:center;font-family:Anton;letter-spacing:.2em;font-size:11pt}
+.cover .foot em{font-style:normal;color:var(--fire2)}
+.cover .by{position:absolute;left:14mm;bottom:24mm;font-size:9pt;color:#cfc8ba}
+.cover .by b{color:#fff;font-size:11pt}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="page cover">
+  <div class="bg"></div><div class="shade"></div>
+  <div class="top">
+    <div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div>
+  </div>
+  <div class="links">
+    <a href="https://www.instagram.com/aigurukool"><i style="background:#dc2743"></i>Instagram: @aigurukool</a>
+    <a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i style="background:#25d366"></i>WhatsApp: AI Automation ki ABC</a>
+    <a href="https://www.aigurukool.in"><i style="background:#ff6a00"></i>aigurukool.in</a>
+  </div>
+  <div class="tag">FREE <b>GUIDE</b></div>
+  <h1><span class="a">N8N Local</span><span class="g">Installation</span></h1>
+  <div class="sub">Apne laptop par N8N, bilkul free</div>
+  <ul class="what">
+    <li>Zero se shuru, coding ki zaroorat nahi</li>
+    <li>Har click, har command, step by step</li>
+    <li>Windows aur Mac dono ke liye</li>
+    <li>Galti ho jaaye toh uska ilaaj bhi</li>
+  </ul>
+  <img class="bot" src="mascot-laptop.png" alt="">
+  <div class="by">Guide by<br><b>Swapnil Tiwari</b><br>Founder, AI Gurukool</div>
+  <div class="foot">AI AUTOMATION KI ABC <em>BY AI GURUKOOL</em></div>
+</section>
+
+<!-- ============ P2: BEFORE YOU START ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">SHURU KARNE SE PEHLE</div>
+  <h2>N8N hai kya, aur <em>local</em> kyun?</h2>
+  <p><b>N8N ek automation tool hai.</b> Aap boxes (jinhe "nodes" kehte hain) ko line se jodte ho, aur kaam apne aap hone lagta hai. Jaise: form bhara gaya, toh Google Sheet mein entry, aur WhatsApp par message. Bina coding ke.</p>
+  <p><b>Local install matlab:</b> N8N aapke apne laptop par chalega. Koi monthly fees nahi, aapka data aapke paas. Seekhne aur practice ke liye ye sabse badhiya tareeka hai.</p>
+
+  <h3>Aapko kya chahiye</h3>
+  <div class="grid3">
+    <div class="card"><b>Laptop</b><span>Windows 10 (22H2) ya Windows 11, 64-bit. Ya koi Mac.</span></div>
+    <div class="card"><b>RAM</b><span>8 GB ya zyada. 4 GB par bahut slow chalega.</span></div>
+    <div class="card"><b>Internet</b><span>Lagbhag 2 GB download hoga (Docker + N8N).</span></div>
+    <div class="card"><b>Samay</b><span>Pehli baar 30 se 45 minute. Chai saath rakhiye.</span></div>
+  </div>
+
+  <h3>Do raaste hain. Aap kaunsa lein?</h3>
+  <table>
+    <tr><th></th><th>Raasta A: Docker (recommended)</th><th>Raasta B: Node.js (quick try)</th></tr>
+    <tr><td><b>Kiske liye</b></td><td>Jo N8N regularly use karna chahte hain</td><td>Jo bas 10 minute mein jhalak dekhna chahte hain</td></tr>
+    <tr><td><b>Mushkil</b></td><td>Thoda lamba, par ek baar ka kaam</td><td>Sabse aasan</td></tr>
+    <tr><td><b>Future</b></td><td>N8N officially isi ko support karta hai</td><td>N8N 3.0 se ye tareeka band ho raha hai</td></tr>
+    <tr><td><b>Page</b></td><td>Page 4 se 9 (Windows), Page 10 (Mac)</td><td>Page 11</td></tr>
+  </table>
+  <div class="box info"><div class="h">Swapnil ki salah</div><p>Agar aap seriously automation seekhna chahte ho, toh seedha <b>Raasta A (Docker)</b> lo. Ek baar set ho gaya, toh roz bas ek click mein N8N chalu.</p></div>
+  <img class="mascot" src="mascot-wave.png" style="right:10mm;bottom:14mm;width:40mm" alt="">
+  <div class="pno"><span>N8N Local Installation Guide</span><span>2</span></div>
+</section>
+
+<!-- ============ P3: WORDS + TERMINAL ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">5 SHABD, AASAN BHASHA MEIN</div>
+  <h2>Pehle ye <em>words</em> samajh lo</h2>
+  <table>
+    <tr><th style="width:28%">Shabd</th><th>Matlab (desi example ke saath)</th></tr>
+    <tr><td><b>Terminal / PowerShell</b></td><td>Kaala window jahan aap laptop ko <b>type karke</b> order dete ho. Mouse ki jagah keyboard.</td></tr>
+    <tr><td><b>Command</b></td><td>Ek line ka order. Copy karo, paste karo, <b>Enter</b> dabao. Bas.</td></tr>
+    <tr><td><b>Docker</b></td><td>Ek <b>tiffin box</b>. N8N ko uske saare saamaan ke saath ek dabbe mein pack karke chalata hai, taaki aapke laptop mein kuch gadbad na ho.</td></tr>
+    <tr><td><b>Container</b></td><td>Wo chalta hua tiffin. Hamara container ka naam hoga <code>n8n</code>.</td></tr>
+    <tr><td><b>Volume</b></td><td>Ek <b>almirah</b> jahan aapke workflows safe rakhe jaate hain. Tiffin band ho jaaye, almirah ka saamaan safe rehta hai.</td></tr>
+    <tr><td><b>Port 5678</b></td><td>Ghar ka <b>darwaza number</b>. N8N is darwaze par milega: <code>localhost:5678</code></td></tr>
+    <tr><td><b>localhost</b></td><td>"Mera apna laptop". Internet ki koi website nahi.</td></tr>
+  </table>
+
+  <h3>Terminal kaise kholein</h3>
+  <div class="two">
+    <div class="card"><b>Windows: PowerShell</b><span>1. Keyboard par <b>Windows key</b> dabao<br>2. Type karo: <b>PowerShell</b><br>3. Normal kaam ke liye: click karke kholo<br>4. "Administrator" chahiye toh: right-click &gt; <b>Run as administrator</b></span></div>
+    <div class="card"><b>Mac: Terminal</b><span>1. <b>Cmd + Space</b> dabao<br>2. Type karo: <b>Terminal</b><br>3. Enter dabao</span></div>
+  </div>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Windows PowerShell</span></div><pre><span class="p">PS C:\Users\Aap&gt;</span> <span class="m">_   &lt;-- yahan command paste karke Enter dabana hai</span></pre></div>
+
+  <div class="box warn"><div class="h">Copy-paste ka zaroori niyam</div>
+    <ul><li>Is guide mein <b>peeli (yellow) line</b> hi command hai. Sirf wahi copy karna, <code>PS C:\Users\Aap&gt;</code> wala hissa nahi.</li>
+    <li>PDF se copy karne par lambi command kabhi 2 line mein toot jaati hai. Isliye saari commands ek text file mein bhi rakhi hain, wahan se copy karo: <b>aigurukool.in/g/n8n-commands-k7x2.txt</b></li>
+    <li>PowerShell mein paste: <b>Ctrl + V</b> ya right-click.</li></ul>
+  </div>
+  <div class="pno"><span>N8N Local Installation Guide</span><span>3</span></div>
+</section>
+
+<!-- ============ P4: STEP 1-2 ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">RAASTA A &middot; WINDOWS</div>
+  <h2>Docker se N8N: <em>Step by step</em></h2>
+
+  <div class="step"><div class="n">1</div><h3>Laptop check karo</h3><div class="t">2 min</div></div>
+  <p><b>(a) Windows version:</b> Windows key dabao, type karo <code>winver</code>, Enter. Window mein "Version 22H2" (Windows 10) ya "Windows 11" dikhna chahiye.</p>
+  <p><b>(b) RAM:</b> Settings &gt; System &gt; About &gt; "Installed RAM". 8 GB ya zyada ho toh perfect.</p>
+  <p><b>(c) Virtualization ON hai ya nahi:</b> <b>Ctrl + Shift + Esc</b> se Task Manager kholo &gt; <b>Performance</b> tab &gt; <b>CPU</b>. Neeche right side mein likha hoga:</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Task Manager &gt; Performance &gt; CPU</span></div><pre><span class="m">Base speed:      2.40 GHz
+Cores:           8</span>
+<span class="o">Virtualization:  Enabled</span>   <span class="m">&lt;-- ye "Enabled" hona chahiye</span></pre></div>
+  <div class="box warn"><div class="h">"Disabled" likha hai?</div><p>Laptop restart karke BIOS mein jaana padega (zyaatar F2, F10 ya Del key, company ke hisaab se). Wahan "Intel VT-x" ya "AMD-V / SVM" ko <b>Enabled</b> karo. Ye setting har laptop mein alag jagah hoti hai, apne laptop model ka naam + "enable virtualization" Google kar lo.</p></div>
+
+  <div class="step"><div class="n">2</div><h3>WSL install karo</h3><div class="t">5 to 10 min</div></div>
+  <p>WSL Windows ke andar ek chhota Linux hai. Docker ko chalne ke liye iski zaroorat hoti hai.</p>
+  <p><b>PowerShell ko "Run as administrator" se kholo</b> (Page 3 dekho) aur ye command chalao:</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Administrator: Windows PowerShell</span></div><pre><span class="p">PS C:\Windows\system32&gt;</span> <span class="c">wsl --install</span>
+<span class="m">Installing: Virtual Machine Platform ...
+Installing: Windows Subsystem for Linux ...
+Installing: Ubuntu ...</span>
+<span class="o">The requested operation is successful. Changes will not be effective until the system is rebooted.</span></pre></div>
+  <ul><li>Install ke baad <b>laptop restart karo.</b></li>
+  <li>Restart ke baad ek Ubuntu window khul sakti hai jo username aur password maangegi. Koi bhi simple naam aur password daal do (password type karte waqt screen par kuch nahi dikhega, ye normal hai).</li></ul>
+  <div class="box tip"><div class="h">WSL pehle se hai?</div><p>Toh bas update kar lo: <code>wsl --update</code></p></div>
+  <div class="pno"><span>N8N Local Installation Guide</span><span>4</span></div>
+</section>
+
+<!-- ============ P5: STEP 3 ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">RAASTA A &middot; WINDOWS</div>
+  <div class="step"><div class="n">3</div><h3>Docker Desktop install karo</h3><div class="t">10 to 15 min</div></div>
+  <p>Docker Desktop wo app hai jo hamara "tiffin box" (container) chalata hai. Personal use aur chhote business ke liye free hai.</p>
+  <ol>
+    <li>Browser mein kholo: <b>docker.com/products/docker-desktop</b></li>
+    <li><b>Download for Windows - AMD64</b> par click karo. (Aapka laptop Intel ya AMD ka hai toh yahi wala. Bahut kam laptops "ARM" hote hain.)</li>
+    <li>Download hui file <b>Docker Desktop Installer.exe</b> par double-click karo.</li>
+    <li>Installer mein <b>"Use WSL 2 instead of Hyper-V"</b> wala box ticked rehne do. <b>OK</b> dabao.</li>
+    <li>Install poora hone par <b>Close and restart</b> (ya laptop restart) karo.</li>
+    <li>Restart ke baad Docker Desktop kholo. Terms par <b>Accept</b> karo.</li>
+    <li>Sign in / Sign up maange toh <b>Skip</b> kar sakte ho. Account zaroori nahi hai.</li>
+    <li>Neeche left corner mein <b>"Engine running"</b> (hara/green) dikhe, matlab Docker taiyaar hai.</li>
+  </ol>
+  <div class="browser"><div class="bar"><span style="font-size:8pt;color:#8a8f99">&#9679; &#9679; &#9679;</span><div class="url">Docker Desktop (aisa kuch dikhega)</div></div>
+    <div class="body" style="place-items:stretch;padding:4mm 5mm">
+      <div style="display:flex;gap:4mm;font-size:8.5pt">
+        <div style="width:32mm;border-right:1px solid #eee;padding-right:3mm;color:#555;line-height:2">Containers<br>Images<br>Volumes<br>Builds</div>
+        <div style="flex:1;color:#777">Containers<br><span style="font-size:8pt">Abhi khaali hai. N8N chalane ke baad yahan "n8n" dikhega.</span></div>
+      </div>
+      <div style="margin-top:4mm;font-size:8pt;display:flex;align-items:center;gap:2mm;color:#333"><span style="width:2.6mm;height:2.6mm;border-radius:50%;background:#1fae5b;display:inline-block"></span>Engine running</div>
+    </div>
+  </div>
+  <div class="box warn"><div class="h">Docker khulte hi error aaye?</div>
+    <ul><li><b>"WSL needs updating"</b>: Admin PowerShell mein <code>wsl --update</code> chalao, phir Docker dobara kholo.</li>
+    <li><b>"Virtualization support not detected"</b>: Step 1(c) dobara dekho. BIOS mein virtualization ON karna hai.</li></ul></div>
+  <div class="box tip"><div class="h">Yaad rakho</div><p>N8N tabhi chalega jab <b>Docker Desktop khula ho</b>. Settings &gt; General mein "Start Docker Desktop when you sign in" ON kar do, toh laptop on karte hi Docker apne aap chalu ho jayega.</p></div>
+  <div class="pno"><span>N8N Local Installation Guide</span><span>5</span></div>
+</section>
+
+<!-- ============ P6: STEP 4-5 ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">RAASTA A &middot; WINDOWS</div>
+  <div class="step"><div class="n">4</div><h3>Check karo ki Docker kaam kar raha hai</h3><div class="t">2 min</div></div>
+  <p>Ab normal PowerShell kholo (administrator ki zaroorat nahi). Pehli command:</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Windows PowerShell</span></div><pre><span class="p">PS C:\Users\Aap&gt;</span> <span class="c">docker --version</span>
+<span class="o">Docker version 2x.x.x, build xxxxxxx</span>   <span class="m">&lt;-- number kuch bhi ho, chalega</span></pre></div>
+  <p>Ab ek test tiffin chalao:</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Windows PowerShell</span></div><pre><span class="p">PS C:\Users\Aap&gt;</span> <span class="c">docker run hello-world</span>
+<span class="m">Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world ...</span>
+
+<span class="o">Hello from Docker!
+This message shows that your installation appears to be working correctly.</span></pre></div>
+  <p><b>"Hello from Docker!"</b> dikha? Badhai ho, Docker ready hai.</p>
+  <div class="box warn"><div class="h">"docker is not recognized" aaya?</div><p>Docker Desktop band hai ya abhi start ho raha hai. Docker Desktop kholo, "Engine running" ka wait karo, PowerShell band karke naya kholo, phir dobara try karo.</p></div>
+
+  <div class="step"><div class="n">5</div><h3>N8N ki almirah (volume) banao</h3><div class="t">30 sec</div></div>
+  <p>Yahan aapke saare workflows aur settings safe rahenge. Ye command <b>sirf ek baar</b> chalani hai:</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Windows PowerShell</span></div><pre><span class="p">PS C:\Users\Aap&gt;</span> <span class="c">docker volume create n8n_data</span>
+<span class="o">n8n_data</span>   <span class="m">&lt;-- bas itna likha aayega, matlab almirah ban gayi</span></pre></div>
+  <img class="mascot" src="mascot-point.png" style="right:8mm;bottom:12mm;width:42mm" alt="">
+  <div class="pno"><span>N8N Local Installation Guide</span><span>6</span></div>
+</section>
+
+<!-- ============ P7: STEP 6 ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">RAASTA A &middot; WINDOWS &middot; ASLI MOMENT</div>
+  <div class="step"><div class="n">6</div><h3>N8N chalu karo</h3><div class="t">3 to 5 min</div></div>
+  <p>Ye <b>ek hi lambi line</b> hai. Poori ek saath copy karo (text file se copy karna sabse safe hai: <b>aigurukool.in/g/n8n-commands-k7x2.txt</b>).</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Windows PowerShell</span></div><pre><span class="p">PS C:\Users\Aap&gt;</span> <span class="c">docker run -d --name n8n --restart unless-stopped -p 5678:5678 -e GENERIC_TIMEZONE="Asia/Kolkata" -e TZ="Asia/Kolkata" -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n</span>
+<span class="m">Unable to find image 'docker.n8n.io/n8nio/n8n:latest' locally
+latest: Pulling from n8nio/n8n
+...  (pehli baar download mein 2 se 5 minute)</span>
+<span class="o">3f9a1c6e2b7d...</span>   <span class="m">&lt;-- lamba sa code aaya, matlab N8N chalu ho gaya</span></pre></div>
+
+  <h3>Is command ka har hissa kya karta hai</h3>
+  <table>
+    <tr><th style="width:44%">Hissa</th><th>Matlab</th></tr>
+    <tr><td><code>docker run</code></td><td>Naya tiffin (container) chalao</td></tr>
+    <tr><td><code>-d</code></td><td>Background mein chalao, PowerShell free rahe</td></tr>
+    <tr><td><code>--name n8n</code></td><td>Container ka naam "n8n" rakho</td></tr>
+    <tr><td><code>--restart unless-stopped</code></td><td>Docker khulte hi N8N apne aap chalu ho jaye</td></tr>
+    <tr><td><code>-p 5678:5678</code></td><td>Darwaza number 5678 kholo</td></tr>
+    <tr><td><code>-e GENERIC_TIMEZONE / TZ</code></td><td>Time India ka (Asia/Kolkata), taaki schedule wale workflows sahi time par chalein</td></tr>
+    <tr><td><code>-e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true</code></td><td>Settings file ko secure rakho (N8N ki official salah)</td></tr>
+    <tr><td><code>-v n8n_data:/home/node/.n8n</code></td><td>Workflows ko almirah (volume) mein save karo</td></tr>
+    <tr><td><code>docker.n8n.io/n8nio/n8n</code></td><td>N8N ka official package</td></tr>
+  </table>
+  <div class="box tip"><div class="h">Check karna hai ki N8N zinda hai?</div><p>Ye command chalao: <code>curl.exe http://localhost:5678/healthz</code><br>Jawab aaye <code>{"status":"ok"}</code> toh sab badhiya hai. (Pehli baar shuru hone mein 20 se 30 second lagte hain.)</p></div>
+  <div class="pno"><span>N8N Local Installation Guide</span><span>7</span></div>
+</section>
+
+<!-- ============ P8: STEP 7-8 ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">RAASTA A &middot; WINDOWS</div>
+  <div class="step"><div class="n">7</div><h3>Browser mein N8N kholo</h3><div class="t">2 min</div></div>
+  <p>Chrome ya Edge mein ye address type karo: <b>http://localhost:5678</b></p>
+  <div class="browser"><div class="bar"><span style="font-size:8pt;color:#8a8f99">&#9679; &#9679; &#9679;</span><div class="url">localhost:5678/setup</div></div>
+    <div class="body"><div class="form"><div class="ttl">Set up owner account</div><div class="f">Email</div><div class="f">First Name</div><div class="f">Last Name</div><div class="f">Password</div><div class="btn">Next</div></div></div></div>
+  <ul>
+    <li>Pehli baar N8N ek <b>owner account</b> banane ko kahega. Ye account sirf aapke laptop par hai, kahin online nahi jaata.</li>
+    <li>Apna email, naam aur ek strong password daalo. <b>Password likh ke rakh lo</b>, baad mein yahi login karega.</li>
+    <li>Kuch survey questions aa sakte hain, unhe bhar do ya skip karo.</li>
+    <li>Bas! Aapke saamne N8N ka khaali canvas hai. <b>Aapka N8N ready hai.</b></li>
+  </ul>
+
+  <div class="step"><div class="n">8</div><h3>Roz ka use: on, off, restart</h3><div class="t">yaad rakhna</div></div>
+  <table>
+    <tr><th style="width:38%">Kaam</th><th>Kaise karein</th></tr>
+    <tr><td><b>N8N chalu karna</b></td><td>Bas Docker Desktop kholo. N8N apne aap chalu ho jayega (Step 6 ki <code>--restart</code> setting ki wajah se). Phir browser mein <b>localhost:5678</b></td></tr>
+    <tr><td><b>N8N band karna</b></td><td>Docker Desktop &gt; Containers &gt; n8n ke aage <b>Stop</b> button. Ya command: <code>docker stop n8n</code></td></tr>
+    <tr><td><b>Dobara chalu karna</b></td><td>Containers &gt; n8n &gt; <b>Start</b>. Ya command: <code>docker start n8n</code></td></tr>
+    <tr><td><b>Kya chal raha hai, dekhna</b></td><td><code>docker ps</code> (list mein "n8n" dikhe toh chal raha hai)</td></tr>
+    <tr><td><b>Error ki details</b></td><td><code>docker logs n8n</code></td></tr>
+  </table>
+  <div class="box warn"><div class="h">Step 6 dobara mat chalana</div><p>Step 6 sirf <b>pehli baar</b> ke liye hai. Dobara chalaoge toh error aayega "name n8n is already in use". Roz ke liye upar wali table use karo.</p></div>
+  <div class="pno"><span>N8N Local Installation Guide</span><span>8</span></div>
+</section>
+
+<!-- ============ P9: UPDATE ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">RAASTA A &middot; KUCH HAFTON BAAD</div>
+  <h2>N8N ko <em>update</em> kaise karein</h2>
+  <p>N8N har kuch hafton mein naye features laata hai. Update karne se aapke workflows <b>delete nahi hote</b>, kyunki wo almirah (volume) mein safe hain. Ye 4 commands ek-ek karke chalao:</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Windows PowerShell</span></div><pre><span class="m"># 1. Naya version download karo</span>
+<span class="p">PS C:\Users\Aap&gt;</span> <span class="c">docker pull docker.n8n.io/n8nio/n8n</span>
+
+<span class="m"># 2. Purana N8N band karo</span>
+<span class="p">PS C:\Users\Aap&gt;</span> <span class="c">docker stop n8n</span>
+
+<span class="m"># 3. Purana tiffin hatao (almirah safe rehti hai)</span>
+<span class="p">PS C:\Users\Aap&gt;</span> <span class="c">docker rm n8n</span>
+
+<span class="m"># 4. Step 6 wali command dobara chalao</span>
+<span class="p">PS C:\Users\Aap&gt;</span> <span class="c">docker run -d --name n8n --restart unless-stopped -p 5678:5678 -e GENERIC_TIMEZONE="Asia/Kolkata" -e TZ="Asia/Kolkata" -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n</span></pre></div>
+  <div class="box warn"><div class="h">Kabhi mat karna</div><p><code>docker volume rm n8n_data</code> ya Docker Desktop &gt; Volumes se "n8n_data" delete. Isse <b>saare workflows hamesha ke liye chale jaate hain.</b></p></div>
+  <div class="box tip"><div class="h">Backup ki aadat daalo</div><p>Har important workflow ko N8N ke andar se <b>Download</b> (workflow ke upar right side ka menu &gt; Download) karke ek folder mein rakh lo. Ye ek .json file hoti hai, kabhi bhi wapas Import kar sakte ho.</p></div>
+  <img class="mascot" src="mascot-think.png" style="right:10mm;bottom:12mm;width:40mm" alt="">
+  <div class="pno"><span>N8N Local Installation Guide</span><span>9</span></div>
+</section>
+
+<!-- ============ P10: MAC ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">RAASTA A &middot; MAC USERS</div>
+  <h2>Mac par aur bhi <em>aasan</em> hai</h2>
+  <p>Mac par WSL ki zaroorat nahi. Bas Docker Desktop aur wahi commands.</p>
+  <div class="step"><div class="n">1</div><h3>Apna chip pata karo</h3></div>
+  <p>Top-left <b>Apple logo &gt; About This Mac</b>. "Chip: Apple M1/M2/M3/M4..." likha hai toh <b>Apple Silicon</b>. "Processor: Intel" likha hai toh <b>Intel</b>.</p>
+  <div class="step"><div class="n">2</div><h3>Docker Desktop install karo</h3></div>
+  <ol><li><b>docker.com/products/docker-desktop</b> kholo, apne chip wala <b>Download for Mac</b> chuno.</li>
+  <li>Download hui <b>Docker.dmg</b> kholo, Docker icon ko <b>Applications</b> folder mein drag karo.</li>
+  <li>Applications se Docker kholo, permissions maange toh <b>OK</b> do, terms <b>Accept</b> karo. Sign in <b>Skip</b> kar sakte ho.</li></ol>
+  <div class="step"><div class="n">3</div><h3>Terminal mein yahi commands</h3></div>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Terminal</span></div><pre><span class="p">aap@MacBook ~ %</span> <span class="c">docker run hello-world</span>
+<span class="o">Hello from Docker!</span>
+
+<span class="p">aap@MacBook ~ %</span> <span class="c">docker volume create n8n_data</span>
+<span class="o">n8n_data</span>
+
+<span class="p">aap@MacBook ~ %</span> <span class="c">docker run -d --name n8n --restart unless-stopped -p 5678:5678 -e GENERIC_TIMEZONE="Asia/Kolkata" -e TZ="Asia/Kolkata" -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n</span>
+
+<span class="p">aap@MacBook ~ %</span> <span class="c">curl http://localhost:5678/healthz</span>
+<span class="o">{"status":"ok"}</span></pre></div>
+  <p>Phir browser mein <b>localhost:5678</b> kholo aur Windows wale <b>Step 7 aur 8</b> follow karo (Page 8). Update ka tareeka bhi same hai (Page 9).</p>
+  <div class="box info"><div class="h">Mac/Linux shortcut (optional)</div><p>N8N ka official one-line installer bhi hai, jo Docker check karke sab khud set karta hai: <code>curl -fsSL https://get.n8n.io | sh</code><br>Beginners ke liye upar wala step-by-step tareeka behtar hai, kyunki usmein aapko pata rehta hai ki kya ho raha hai.</p></div>
+  <div class="pno"><span>N8N Local Installation Guide</span><span>10</span></div>
+</section>
+
+<!-- ============ P11: NODE QUICK TRY ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">RAASTA B &middot; 10 MINUTE QUICK TRY</div>
+  <h2>Bina Docker, <em>Node.js</em> se</h2>
+  <div class="box warn"><div class="h">Pehle ye padh lo</div><p>N8N ki official docs ke hisaab se <b>N8N 3.0 se npm/npx wala tareeka support nahi hoga.</b> Isliye ise sirf "jhalak dekhne" ke liye use karo. Regular kaam ke liye Raasta A (Docker) lo.</p></div>
+  <div class="step"><div class="n">1</div><h3>Node.js install karo</h3><div class="t">5 min</div></div>
+  <ol><li><b>nodejs.org</b> kholo.</li>
+  <li><b>Version 24 (LTS)</b> wala installer download karo. N8N ko Node <b>20.19 se 24.x</b> ke beech chahiye. Agar site par 26 ya usse naya version sabse upar dikhe, toh "Other downloads / Previous releases" se <b>v24</b> lo.</li>
+  <li>Installer chalao, sab default rakh ke <b>Next, Next, Install</b>.</li></ol>
+  <div class="step"><div class="n">2</div><h3>Check karo</h3></div>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Windows PowerShell</span></div><pre><span class="p">PS C:\Users\Aap&gt;</span> <span class="c">node -v</span>
+<span class="o">v24.x.x</span>   <span class="m">&lt;-- 24 se shuru hona chahiye</span></pre></div>
+  <div class="step"><div class="n">3</div><h3>N8N chalao</h3><div class="t">3 to 5 min</div></div>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Windows PowerShell</span></div><pre><span class="p">PS C:\Users\Aap&gt;</span> <span class="c">npx n8n</span>
+<span class="m">Need to install the following packages:
+n8n@x.x.x
+Ok to proceed? (y)</span> <span class="c">y</span>
+<span class="m">... (download hoga, thoda samay lagega)</span>
+<span class="o">Editor is now accessible via:
+http://localhost:5678</span></pre></div>
+  <ul><li>Browser mein <b>localhost:5678</b> kholo, Page 8 ka Step 7 follow karo.</li>
+  <li><b>Band karna:</b> PowerShell window mein <b>Ctrl + C</b>. Window band kar doge toh bhi N8N band ho jayega.</li>
+  <li><b>Dobara chalana:</b> phir se <code>npx n8n</code></li></ul>
+  <div class="box info"><div class="h">PowerShell "scripts disabled" error de?</div><p>Command Prompt (CMD) mein try karo: Windows key &gt; type <b>cmd</b> &gt; Enter, phir <code>npx n8n</code>.</p></div>
+  <div class="pno"><span>N8N Local Installation Guide</span><span>11</span></div>
+</section>
+
+<!-- ============ P12: TROUBLESHOOTING ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">GADBAD HO GAYI? GHABRAO MAT</div>
+  <h2>Common problems ka <em>ilaaj</em></h2>
+  <table>
+    <tr><th style="width:38%">Problem</th><th>Ilaaj</th></tr>
+    <tr><td><b>"docker is not recognized" / "command not found"</b></td><td>Docker Desktop kholo, "Engine running" ka wait karo. Phir PowerShell band karke naya kholo.</td></tr>
+    <tr><td><b>Docker: "Virtualization support not detected"</b></td><td>BIOS mein virtualization ON karo (Page 4, Step 1c).</td></tr>
+    <tr><td><b>Docker: "WSL update required"</b></td><td>Admin PowerShell mein <code>wsl --update</code>, phir laptop restart.</td></tr>
+    <tr><td><b>localhost:5678 nahi khul raha</b></td><td>30 second ruko, page refresh karo. Phir <code>docker ps</code> chalao, "n8n" na dikhe toh <code>docker start n8n</code>. Details ke liye <code>docker logs n8n</code></td></tr>
+    <tr><td><b>"name n8n is already in use"</b></td><td>N8N pehle se bana hua hai. Bas <code>docker start n8n</code> chalao. Step 6 dobara mat chalao.</td></tr>
+    <tr><td><b>"port 5678 is already allocated"</b></td><td>Koi aur N8N (shayad <code>npx n8n</code> wala) chal raha hai. Use band karo (Ctrl + C) ya laptop restart karo.</td></tr>
+    <tr><td><b>Owner account ka password bhool gaye</b></td><td>PowerShell / Terminal mein: <code>docker exec -u node -it n8n n8n user-management:reset</code> phir <code>docker restart n8n</code>. Phir localhost:5678 par owner account dobara banana padega. Workflows safe rehte hain.</td></tr>
+    <tr><td><b>Laptop bahut slow ho gaya</b></td><td>Kaam na ho toh <code>docker stop n8n</code> aur Docker Desktop band kar do. 8 GB se kam RAM par ye normal hai.</td></tr>
+    <tr><td><b>Schedule wale workflows galat time par chal rahe</b></td><td>Step 6 mein <code>Asia/Kolkata</code> wala hissa check karo. N8N mein Settings &gt; Personal / workflow settings mein bhi timezone dekh lo.</td></tr>
+  </table>
+  <div class="box info"><div class="h">Phir bhi atke ho?</div><p>Error ka screenshot lekar WhatsApp channel "AI Automation ki ABC" par poochho, ya Instagram <b>@aigurukool</b> par DM karo. Official docs: <b>docs.n8n.io</b></p></div>
+  <div class="pno"><span>N8N Local Installation Guide</span><span>12</span></div>
+</section>
+
+<!-- ============ P13: FIRST WORKFLOW + CTA ============ -->
+<section class="page">
+  <div class="brand"><div class="b"><img src="logo-mark.jpg" alt="">AI Gurukool</div><div class="links"><a href="https://www.instagram.com/aigurukool"><i class="i-ig"></i>@aigurukool</a><a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w"><i class="i-wa"></i>WhatsApp Channel</a><a href="https://www.aigurukool.in"><i class="i-web"></i>aigurukool.in</a></div></div>
+  <div class="kicker">BONUS &middot; 5 MINUTE</div>
+  <h2>Aapka <em>pehla workflow</em></h2>
+  <p>Install ho gaya? Chaliye ek chhota sa workflow bana ke dekhte hain, taaki haath khul jaaye.</p>
+  <ol>
+    <li>N8N mein <b>Create Workflow</b> (ya "Start from scratch") par click karo.</li>
+    <li><b>+</b> button dabao, search karo <b>"Manual"</b> aur <b>Trigger manually</b> chuno. Ye workflow ka "start button" hai.</li>
+    <li>Uske aage wale <b>+</b> par click karo, search karo <b>"Edit Fields"</b> (Set). <b>Add Field</b> mein Name: <code>message</code>, Value: <code>Namaste N8N!</code></li>
+    <li>Upar <b>Execute workflow</b> (Test workflow) dabao.</li>
+    <li>Edit Fields node par hara tick aayega aur output mein <b>"Namaste N8N!"</b> dikhega.</li>
+  </ol>
+  <div class="term"><div class="bar"><i></i><i></i><i></i><span>Workflow ka naksha</span></div><pre><span class="c">[ Trigger manually ]  ----&gt;  [ Edit Fields: message = "Namaste N8N!" ]</span>
+<span class="o">          start button                 output: { "message": "Namaste N8N!" }</span></pre></div>
+  <p>Bas! Yahi N8N ka core hai: <b>trigger</b> (kab shuru ho) + <b>nodes</b> (kya karna hai). Ab Manual ki jagah Schedule, Webhook ya Google Sheets trigger lagao, aur asli automation shuru.</p>
+
+  <div style="margin-top:8mm;background:linear-gradient(135deg,#0f1117,#2a1405);color:#fff;border-radius:4mm;padding:7mm 8mm;position:relative;overflow:hidden">
+    <div style="font-family:Anton;letter-spacing:.1em;color:var(--fire1);font-size:10pt">AAGE KYA?</div>
+    <div style="font-family:Baloo;font-weight:800;font-size:19pt;line-height:1.15;margin:1mm 0 3mm;max-width:105mm">Roz ek AI automation concept, aasan Hinglish mein. Free.</div>
+    <div style="display:flex;flex-direction:column;gap:2.5mm;font-size:10pt;max-width:110mm">
+      <a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w" style="background:#25d366;border-radius:2.5mm;padding:2.5mm 4mm;font-weight:700">WhatsApp Channel: AI Automation ki ABC &rarr;</a>
+      <a href="https://www.instagram.com/aigurukool" style="background:linear-gradient(45deg,#f09433,#dc2743,#bc1888);border-radius:2.5mm;padding:2.5mm 4mm;font-weight:700">Instagram: @aigurukool &rarr;</a>
+      <a href="https://www.aigurukool.in/posts/" style="background:#ff6a00;border-radius:2.5mm;padding:2.5mm 4mm;font-weight:700">Free guides aur posts: aigurukool.in &rarr;</a>
+    </div>
+    <img src="mascot-celebrate.png" style="position:absolute;right:2mm;bottom:-4mm;width:62mm" alt="">
+  </div>
+  <p style="margin-top:5mm;font-size:8.5pt;color:var(--muted)">Ye guide October 2026 mein N8N aur Docker ki official documentation ke hisaab se banayi gayi hai. Software badalta rehta hai; screen thodi alag dikhe toh ghabraiye nahi, button ke naam se dhoondhiye. &copy; AI Gurukool</p>
+  <div class="pno"><span>N8N Local Installation Guide</span><span>13</span></div>
+</section>
+
+</body>
+</html>
