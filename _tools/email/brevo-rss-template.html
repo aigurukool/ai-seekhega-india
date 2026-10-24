@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Gurukool</title></head>
+<body style="margin:0;padding:0;background:#f6f4ef;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f4ef;">
+<tr><td align="center" style="padding:24px 12px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#1a2332;">
+
+  <tr><td><a href="https://www.aigurukool.in/" target="_blank"><img src="https://www.aigurukool.in/assets/email/header.jpg" width="600" alt="AI Gurukool" style="display:block;width:100%;height:auto;border:0;"></a></td></tr>
+
+  <tr><td style="padding:28px 32px 6px;">
+    <p style="margin:0;font-size:22px;font-weight:bold;color:#0f1d31;">Namaste! 🙏</p>
+    <p style="margin:10px 0 0;font-size:16px;line-height:24px;color:#5d6878;">AI Gurukool par naya post aaya hai. 5 minute nikalo, padho, aur aaj hi kuch naya try karo.</p>
+  </td></tr>
+
+  {% for item in params.items | slice:":5" %}
+  <tr><td style="padding:20px 32px 8px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e4e0d6;border-radius:12px;overflow:hidden;">
+      <tr><td><a href="{{ item.LINK }}" target="_blank"><img src="{{ item.ENCLOSURE }}" width="536" alt="" style="display:block;width:100%;height:auto;border:0;"></a></td></tr>
+      <tr><td style="padding:20px 22px 24px;">
+        <p style="margin:0;font-size:21px;line-height:28px;font-weight:bold;"><a href="{{ item.LINK }}" target="_blank" style="color:#0f1d31;text-decoration:none;">{{ item.TITLE }}</a></p>
+        <p style="margin:10px 0 18px;font-size:15px;line-height:23px;color:#5d6878;">{{ item.DESCRIPTION | safe }}</p>
+        <a href="{{ item.LINK }}" target="_blank" style="display:inline-block;background:#c9a45c;color:#0f1d31;font-size:16px;font-weight:bold;text-decoration:none;padding:12px 26px;border-radius:30px;">Poora padho →</a>
+      </td></tr>
+    </table>
+  </td></tr>
+  {% endfor %}
+
+  <tr><td style="padding:22px 32px 30px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0f1d31;border-radius:12px;">
+      <tr><td style="padding:22px 24px;text-align:center;">
+        <p style="margin:0;font-size:17px;font-weight:bold;color:#ffffff;">Roz ek AI concept, aasan Hinglish mein</p>
+        <p style="margin:6px 0 16px;font-size:14px;color:#a9b4c4;">WhatsApp channel join karo, free hai.</p>
+        <a href="https://whatsapp.com/channel/0029Va7C8ZA3mFY86O4FQ81w" target="_blank" style="display:inline-block;background:#25d366;color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;padding:11px 24px;border-radius:30px;">WhatsApp Channel Join Karo</a>
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <tr><td style="padding:18px 32px 26px;background:#f6f4ef;text-align:center;font-size:12px;line-height:19px;color:#5d6878;">
+    <strong style="color:#1a2332;">AI Gurukool</strong> · Gurugram, India<br>
+    Aapko ye email isliye mila kyunki aapne AI Gurukool newsletter subscribe kiya hai.<br>
+    <a href="{{ mirror }}" style="color:#5d6878;">Browser mein dekho</a> &nbsp;|&nbsp; <a href="{{ unsubscribe }}" style="color:#5d6878;">Unsubscribe</a>
+  </td></tr>
+
+</table>
+</td></tr></table>
+</body></html>
