@@ -92,6 +92,21 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:7
 .card p{color:var(--muted);font-size:.95rem;flex:1;margin-bottom:22px}
 .card .btn{align-self:flex-start}
 .card .btn svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card.mail{background:linear-gradient(135deg,var(--navy),var(--navy3));border-color:var(--gold);color:#fff}
+.card.mail .kind{color:var(--gold2)}
+.card.mail p{color:#cfd7e3;margin-bottom:18px}
+.card.mail.hl{box-shadow:0 0 0 3px var(--gold2)}
+.card.mail form{display:flex;flex-direction:column;gap:10px}
+.card.mail input[type=email]{padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;font:inherit}
+.card.mail input[type=email]::placeholder{color:var(--muted-d)}
+.card.mail input[type=email]:focus{outline:none;border-color:var(--gold)}
+.card.mail button{padding:12px 18px;border:0;border-radius:8px;background:var(--gold);color:var(--navy);font:600 .95rem Inter,system-ui,sans-serif;cursor:pointer}
+.card.mail button:hover{background:var(--gold2)}
+.card.mail button:disabled{opacity:.6;cursor:wait}
+.card.mail .hp{display:none}
+.card.mail .msg{font-size:.88rem;padding:9px 12px;border-radius:8px}
+.card.mail .msg.ok{background:rgba(37,211,102,.15);color:#b8f5cf}
+.card.mail .msg.bad{background:rgba(255,73,73,.15);color:#ffc4c4}
 
 .topnote{background:var(--gold);color:var(--navy);font-size:.92rem;font-weight:500;padding:10px 0;text-align:center}
 .topnote a{font-weight:700;text-decoration:underline;white-space:nowrap}
@@ -133,7 +148,7 @@ footer .links a:hover{color:var(--gold2)}
     <div class="label">Free Guides</div>
     <h1>Saari free AI guides, ek jagah</h1>
     <div class="tagline">AI Seekhega India</div>
-    <p>Videos mein jin guides ka zikr hota hai, sab yahin milengi. Koi form nahi, koi login nahi. Seedha download karo.</p>
+    <p>Videos mein jin guides ka zikr hota hai, sab yahin milengi. Zyadatar guides seedha download karo. Kuch special guides email par aati hain.</p>
     <div class="follow">
       <a class="fl wa" data-link="channel" href="#" target="_blank" rel="noopener">
         <div class="pl"><svg><use href="#i-wa"/></svg></div>
@@ -153,24 +168,6 @@ footer .links a:hover{color:var(--gold2)}
 
 <section class="list">
   <div class="wrap">
-    <div class="gated" id="n8n-guide">
-      <div>
-        <div class="kind">Free PDF &middot; Email par milegi</div>
-        <h3>N8N Local Installation Guide</h3>
-        <p>Apne laptop par N8N install karne ka poora step-by-step tareeka. Email daaliye, PDF seedha aapke inbox mein.</p>
-        <ul><li>Bonus: AI updates wala free newsletter</li></ul>
-      </div>
-      <div>
-        <form id="gate-form" novalidate>
-          <input type="email" name="EMAIL" placeholder="Aapka email" autocomplete="email" aria-label="Email" required>
-          <input type="text" name="email_address_check" value="" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <input type="hidden" name="locale" value="en">
-          <button type="submit">PDF email par bhejein</button>
-          <div class="note">Sahi email daaliye, guide wahin aayegi. Spam nahi bhejte.</div>
-          <div class="msg" role="status" hidden></div>
-        </form>
-      </div>
-    </div>
     <h2>Guides</h2>
     <div class="sub">Nayi guide aate hi yahan jud jaati hai.</div>
     <div class="grid" id="grid"></div>
@@ -191,9 +188,12 @@ footer .links a:hover{color:var(--gold2)}
 
 <script>
 /* ===== EDIT HERE ===== */
-/* Guides come from this Google Sheet (columns: Title, Description, PDF link).
-   Add a row in the Sheet and it shows up here. No code change needed. */
+/* Guides come from this Google Sheet (columns: Title, Description, PDF link, Email).
+   Add a row in the Sheet and it shows up here. No code change needed.
+   Email column = "Yes": the guide is sent by email and the person joins the newsletter. */
 const SHEET_ID = "1nrzSVrnXcLQCj6b3k3Iju3jMoTitjG5leSFFIrPUugw";
+/* Web app URL of the Guide Mailer Apps Script (see _tools/guide-mailer/SETUP.md) */
+const MAILER_URL = "PASTE_APPS_SCRIPT_URL_HERE";
 /* Shown if the Sheet cannot be read (for example, if it is not shared publicly). */
 const FALLBACK = [
   { title: "Claude Editing Process Guide",
@@ -213,53 +213,70 @@ function safeUrl(u){
   u = String(u || "").trim();
   return (/^https:\/\//i.test(u) || u.startsWith("/")) ? u : "";
 }
+function slug(t){ return String(t).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""); }
+function mailForm(card, title){
+  const f = document.createElement("form"); f.noValidate = true;
+  f.innerHTML = '<input type="email" placeholder="Aapka email" autocomplete="email" aria-label="Email" required>' +
+    '<input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+    '<button type="submit">PDF email par bhejein</button><div class="msg" role="status" hidden></div>';
+  const em = f.querySelector("input[type=email]"), btn = f.querySelector("button"), msg = f.querySelector(".msg");
+  const show = (ok, t) => { msg.hidden = false; msg.className = "msg " + (ok ? "ok" : "bad"); msg.textContent = t; };
+  f.addEventListener("submit", e => {
+    e.preventDefault();
+    const email = em.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { show(false, "Sahi email daaliye, jaise naam@gmail.com"); return; }
+    btn.disabled = true;
+    fetch(MAILER_URL, { method: "POST", body: new URLSearchParams({ email, title, website: f.website.value }) })
+      .then(r => r.json())
+      .then(d => {
+        if (d && d.ok) { f.reset(); show(true, "PDF aapke email par bhej di hai! Inbox check karein. Na dikhe toh Promotions ya Spam folder dekhein."); }
+        else show(false, "Bhej nahi paye. Email check karke dobara try karein.");
+      })
+      .catch(() => show(false, "Network issue. Thodi der baad try karein."))
+      .finally(() => { btn.disabled = false; });
+  });
+  card.appendChild(f);
+}
 function render(items){
   const grid = document.getElementById("grid");
   grid.textContent = "";
   items.forEach(it => {
     const url = safeUrl(it.url);
     if (!it.title || !url) return;
-    const card = document.createElement("div"); card.className = "card";
-    card.innerHTML = '<div class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><div class="kind">Free PDF</div>';
+    const card = document.createElement("div"); card.className = "card" + (it.mail ? " mail" : ""); card.id = slug(it.title);
+    card.innerHTML = '<div class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div>';
+    const k = document.createElement("div"); k.className = "kind"; k.textContent = it.mail ? "Free PDF \u00b7 Email par milegi" : "Free PDF"; card.appendChild(k);
     const h = document.createElement("h3"); h.textContent = it.title; card.appendChild(h);
     const p = document.createElement("p"); p.textContent = it.desc || ""; card.appendChild(p);
-    const a = document.createElement("a"); a.className = "btn btn-gold btn-sm"; a.href = url; a.target = "_blank"; a.rel = "noopener";
-    a.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>';
-    a.appendChild(document.createTextNode("Download PDF"));
-    card.appendChild(a);
+    if (it.mail) { mailForm(card, it.title); }
+    else {
+      const a = document.createElement("a"); a.className = "btn btn-gold btn-sm"; a.href = url; a.target = "_blank"; a.rel = "noopener";
+      a.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>';
+      a.appendChild(document.createTextNode("Download PDF"));
+      card.appendChild(a);
+    }
     grid.appendChild(card);
   });
+  /* aigurukool.in/resources/?get=guide-title-slug jumps to that guide */
+  const want = new URLSearchParams(location.search).get("get");
+  const target = want && document.getElementById(slug(want));
+  if (target) {
+    target.classList.add("hl");
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    const inp = target.querySelector("input[type=email]"); if (inp) inp.focus({ preventScroll: true });
+  }
 }
 render(FALLBACK);
 
-/* N8N guide: delivered by Brevo's confirmation email after this form is submitted */
-(function () {
-  const ACTION = "https://57d32bab.sibforms.com/serve/MUIFAJ6iykQB4ASvrwi7fMUZS9NkFt6NDKK7oPDctOdDj9VTpptRyI9lmHh_DwN0nuurl0wAiOWqCZVUCXEzgBET_LZqKtJ6igEVRkhRKmy5DPxhrmRjF1Y9bQ2hvcU05A0S8N77P6DZPQ-ud5J1i2TAwKjd0wr4Xq9DHESVEYIHuX_I4gq2tlwAQJRmq6WiP3kPOkohKZGnFyMDcQ==";
-  const f = document.getElementById("gate-form"), msg = f.querySelector(".msg"), btn = f.querySelector("button");
-  function show(ok, t) { msg.hidden = false; msg.className = "msg " + (ok ? "ok" : "bad"); msg.textContent = t; }
-  f.addEventListener("submit", e => {
-    e.preventDefault();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.EMAIL.value.trim())) { show(false, "Sahi email daaliye, jaise naam@gmail.com"); return; }
-    btn.disabled = true;
-    fetch(ACTION + "?isAjax=1", { method: "POST", body: new FormData(f) })
-      .then(r => r.json())
-      .then(d => {
-        if (d && d.success) { f.reset(); show(true, "PDF aapke email par bhej di hai! Inbox check karein. Na dikhe toh Promotions ya Spam folder dekhein."); }
-        else show(false, "Bhej nahi paye. Email check karke dobara try karein.");
-      })
-      .catch(() => show(false, "Network issue. Thodi der baad try karein."))
-      .finally(() => { btn.disabled = false; });
-  });
-})();
 
 window.onSheet = function(res){
   try {
     const rows = (res.table.rows || []).map(r => {
       const c = r.c || [];
       const v = i => (c[i] && c[i].v != null) ? String(c[i].v).trim() : "";
-      return { title: v(0), desc: v(1), url: v(2) };
+      return { title: v(0), desc: v(1), url: v(2), mail: v(3).toLowerCase() === "yes" };
     }).filter(r => r.title && safeUrl(r.url));
-    if (rows.length) render(rows.reverse());
+    if (rows.length) render(rows.reverse().sort((a, b) => b.mail - a.mail));
   } catch (e) {}
 };
 const s = document.createElement("script");
