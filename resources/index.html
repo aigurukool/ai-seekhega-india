@@ -229,7 +229,7 @@ function mailForm(card, title){
     fetch(MAILER_URL, { method: "POST", body: new URLSearchParams({ email, title, website: f.website.value }) })
       .then(r => r.json())
       .then(d => {
-        if (d && d.ok) { f.reset(); show(true, "PDF aapke email par bhej di hai! Inbox check karein. Na dikhe toh Promotions ya Spam folder dekhein."); }
+        if (d && d.ok) { f.reset(); show(true, "PDF bhej di hai! Gmail mein Promotions tab zaroor check karein. Wahan na mile toh Spam folder dekhein."); }
         else show(false, "Bhej nahi paye. Email check karke dobara try karein.");
       })
       .catch(() => show(false, "Network issue. Thodi der baad try karein."))
