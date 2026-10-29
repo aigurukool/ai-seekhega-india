@@ -84,6 +84,9 @@ function sendGuide_(props, email, g) {
     'padding:14px 26px;border-radius:6px;text-decoration:none;font-weight:bold">PDF Download karein</a></p>' +
     '<p>Aur saari free guides yahan milengi: <a href="https://www.aigurukool.in/resources/">aigurukool.in/resources</a></p>' +
     '<p>Ab aap AI Gurukool newsletter mein bhi jud gaye hain, AI ki zaroori updates Hinglish mein milti rahengi.</p>' +
+    '<p style="background:#fff7e6;border-left:4px solid #c9a45c;padding:12px 14px;border-radius:4px">' +
+    '<b>Ek chhota sa kaam:</b> Agar ye mail Gmail ke Promotions tab mein aaya hai, to isse <b>Primary</b> tab mein drag kar dijiye. ' +
+    'Gmail poochhe to "Yes" dabaiye. Isse agli guides aur newsletter seedha aapke inbox mein aayenge.</p>' +
     '<p>Swapnil<br>AI Gurukool | AI Seekhega India</p></div>';
   brevo_(props, "/smtp/email", {
     sender: { email: props.getProperty("SENDER_EMAIL"), name: props.getProperty("SENDER_NAME") || "AI Gurukool" },
