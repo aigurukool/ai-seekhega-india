@@ -37,3 +37,8 @@ Kisne kaunsi guide li, "Requests" tab mein apne aap log hota rahega.
 
 Reel CTA ke liye direct link: `aigurukool.in/resources/?get=guide-ka-title`
 (title small letters, spaces ki jagah `-`, jaise `?get=n8n-local-installation-guide`)
+
+## Column E: Show
+- `Yes` = guide resources page pe sabko dikhegi
+- khaali = page pe chhupi, sirf `?get=` link se khulegi (reel comment/DM ke liye)
+- Jab tak column E ka heading khaali hai, saari guides dikhti hain

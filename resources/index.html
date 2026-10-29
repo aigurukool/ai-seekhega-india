@@ -171,6 +171,7 @@ footer .links a:hover{color:var(--gold2)}
     <h2>Guides</h2>
     <div class="sub">Nayi guide aate hi yahan jud jaati hai.</div>
     <div class="grid" id="grid"></div>
+    <p id="more" hidden style="margin-top:28px"><a class="btn btn-gold btn-sm" href="/resources/">Saari free guides dekhein &rarr;</a></p>
   </div>
 </section>
 
@@ -188,7 +189,7 @@ footer .links a:hover{color:var(--gold2)}
 
 <script>
 /* ===== EDIT HERE ===== */
-/* Guides come from this Google Sheet (columns: Title, Description, PDF link, Email).
+/* Guides come from this Google Sheet (columns: Title, Description, PDF link, Email, Show).
    Add a row in the Sheet and it shows up here. No code change needed.
    Email column = "Yes": the guide is sent by email and the person joins the newsletter. */
 const SHEET_ID = "1nrzSVrnXcLQCj6b3k3Iju3jMoTitjG5leSFFIrPUugw";
@@ -237,9 +238,15 @@ function mailForm(card, title){
   });
   card.appendChild(f);
 }
-function render(items){
+function render(all){
   const grid = document.getElementById("grid");
   grid.textContent = "";
+  /* ?get=guide-title-slug shows only that guide (works for hidden guides too) */
+  const want = new URLSearchParams(location.search).get("get");
+  const one = want ? all.filter(it => slug(it.title) === slug(want)) : [];
+  const items = one.length ? one : all.filter(it => it.show !== false);
+  const more = document.getElementById("more");
+  if (more) more.hidden = !one.length;
   items.forEach(it => {
     const url = safeUrl(it.url);
     if (!it.title || !url) return;
@@ -257,9 +264,7 @@ function render(items){
     }
     grid.appendChild(card);
   });
-  /* aigurukool.in/resources/?get=guide-title-slug jumps to that guide */
-  const want = new URLSearchParams(location.search).get("get");
-  const target = want && document.getElementById(slug(want));
+  const target = one.length && grid.firstElementChild;
   if (target) {
     target.classList.add("hl");
     target.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -271,10 +276,14 @@ render(FALLBACK);
 
 window.onSheet = function(res){
   try {
+    /* Column E "Show": Yes = listed on the page; blank = hidden, opens only via ?get= link.
+       Until column E has a heading, every guide is listed. */
+    const useShow = !!(res.table.cols[4] && String(res.table.cols[4].label || "").trim());
     const rows = (res.table.rows || []).map(r => {
       const c = r.c || [];
       const v = i => (c[i] && c[i].v != null) ? String(c[i].v).trim() : "";
-      return { title: v(0), desc: v(1), url: v(2), mail: v(3).toLowerCase() === "yes" };
+      return { title: v(0), desc: v(1), url: v(2), mail: v(3).toLowerCase() === "yes",
+               show: useShow ? v(4).toLowerCase() === "yes" : true };
     }).filter(r => r.title && safeUrl(r.url));
     if (rows.length) render(rows.reverse().sort((a, b) => b.mail - a.mail));
   } catch (e) {}
