@@ -5,6 +5,7 @@ author: Swapnil Tiwari
 permalink: /posts/:title/
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
 feed:
   path: feed.xml
 exclude:
