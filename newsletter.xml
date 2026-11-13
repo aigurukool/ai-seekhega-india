@@ -13,6 +13,7 @@ sitemap: false
     {%- for post in site.posts limit:10 %}
     <item>
       <title>{{ post.title | xml_escape }}</title>
+      <emailsubject>{{ post.email_subject | default: post.title | xml_escape }}</emailsubject>
       <link>{{ site.url }}{{ post.url }}</link>
       <guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
       <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
