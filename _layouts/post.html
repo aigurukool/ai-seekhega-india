@@ -22,6 +22,10 @@ layout: base
 .cta a{display:inline-flex;align-items:center;padding:11px 18px;border-radius:8px;font-weight:600;font-size:.92rem;text-decoration:none}
 .cta .wa{background:#25d366;color:#fff}
 .cta .nl{background:var(--navy);color:#fff}
+.searches{margin-top:36px;padding-top:18px;border-top:1px solid var(--line)}
+.searches h4{font-size:.95rem;color:var(--muted);font-weight:600;margin-bottom:10px}
+.searches ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.searches li{background:#ece8de;color:var(--ink);font-size:.92rem;padding:6px 12px;border-radius:999px;margin:0}
 .back{display:inline-block;margin-top:24px;color:var(--muted);font-size:.92rem}
 </style>
 <header class="head">
@@ -35,6 +39,7 @@ layout: base
   <article class="narrow post">
     {% if page.image %}<img class="cover" src="{{ page.image }}" alt="{{ page.title }}">{% endif %}
     {{ content }}
+    {% if page.searches %}<div class="searches"><h4>Log yeh bhi search karte hain</h4><ul>{% for q in page.searches %}<li>{{ q }}</li>{% endfor %}</ul></div>{% endif %}
     <div class="cta">
       <h3>Aage ki seekh miss mat karna</h3>
       <p>Roz ek AI concept, aasan Hinglish mein. Free hai.</p>

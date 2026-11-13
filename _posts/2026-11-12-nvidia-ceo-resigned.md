@@ -1,6 +1,18 @@
 ---
-title: "NVIDIA CEO Resigned - पूरी कहानी यह है!!!!"
-description: "NVIDIA के co-founder Jensen Huang ने CEO पद छोड़ दिया। Colette Kress बनीं interim CEO। AI industry और आपके लिए इसका मतलब क्या है?"
+title: "NVIDIA CEO Resigned - Poori Kahani yeh hai!!!!"
+description: "NVIDIA ke co-founder Jensen Huang ne CEO pad chhod diya. Colette Kress bani interim CEO. AI industry aur aapke liye iska matlab kya hai?"
+searches:
+  - Why NVIDIA CEO resigned
+  - Why did Jensen Huang resign
+  - Did Jensen Huang resign
+  - Jensen Huang resignation news
+  - Who is the new CEO of NVIDIA
+  - Jensen Huang NVIDIA issue
+  - Jensen Huang ne resign kyon kiya
+  - Jensen Huang ne resign kar diya?
+  - NVIDIA ka naya CEO kaun hai
+  - Jensen Huang ने resign क्यों किया
+  - NVIDIA CEO ने इस्तीफा दिया
 image: /assets/posts/nvidia-ceo-resigned.jpg
 ---
 **जिस इंसान ने NVIDIA का AI empire बनाया, वही चले गए।**
