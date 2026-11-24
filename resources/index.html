@@ -288,7 +288,7 @@ window.onSheet = function(res){
       return { title: v(0), desc: v(1), url: v(2), mail: v(3).toLowerCase() === "yes",
                show: useShow ? v(4).toLowerCase() === "yes" : true };
     }).filter(r => r.title && safeUrl(r.url));
-    if (rows.length) render(rows.reverse().sort((a, b) => b.mail - a.mail));
+    if (rows.length) render(rows.reverse()); /* last Sheet row shows first */
   } catch (e) {}
 };
 const s = document.createElement("script");
